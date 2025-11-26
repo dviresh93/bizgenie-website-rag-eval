@@ -12,7 +12,7 @@ A modular RAG (Retrieval-Augmented Generation) system that allows you to index a
 
 ## Demo
 
-[Watch the Introduction Video](intro.mp4)
+[Watch the Introduction Video](https://drive.google.com/file/d/176K1GBaAhXD4zUE_W--ww8dX3Zkzz8lQ/view?usp=sharing)
 
 ## Prerequisites
 
