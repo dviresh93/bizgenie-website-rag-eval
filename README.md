@@ -44,6 +44,18 @@ A modular RAG (Retrieval-Augmented Generation) system that allows you to index a
 4.  **Access the UI:**
     Open [http://localhost:8000](http://localhost:8000) in your browser.
 
+## 📚 Additional Resources
+
+- **[PLAN.md](PLAN.md)** - Comprehensive exploration of architecture options
+- **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Detailed implementation strategy
+- **[TODO.md](TODO.md)** - Developer guide with step-by-step instructions
+
+### External Documentation
+- [Jina AI Reader](https://github.com/jina-ai/reader) - Web to markdown converter
+- [Claude API Docs](https://docs.anthropic.com/) - Anthropic's LLM API
+- [ChromaDB Docs](https://docs.trychroma.com/) - Vector database
+- [FastAPI Docs](https://fastapi.tiangolo.com/) - Web framework
+
 ## Architecture
 
 - **Frontend:** Static HTML/JS served by FastAPI.
@@ -141,36 +153,6 @@ Ensure the script tag in `ui/index.html` specifies the full path:
 
 ---
 
-## 📊 Performance & Cost
-
-### Typical Usage (Per Query)
-
-| Operation        | Provider       | Cost        | Time   |
-|------------------|----------------|-------------|--------|
-| Embedding (query)| OpenAI         | ~$0.00002   | 100ms  |
-| Vector search    | ChromaDB       | FREE        | 50ms   |
-| LLM generation   | Claude 3 Opus  | ~$0.03-0.05 | 2-4s   |
-| **Total per query** |                | **~$0.03**  | **~3s** |
-
-### Indexing Costs (One-time)
-
-| Operation        | Provider | Cost (per page) | Time   |
-|------------------|----------|-----------------|--------|
-| URL fetch        | Jina AI  | FREE            | 2-3s   |
-| Chunking         | Local    | FREE            | <100ms |
-| Embedding        | OpenAI   | ~$0.001         | 500ms  |
-| Storage          | ChromaDB | FREE            | 200ms  |
-| **Total per page** |          | **~$0.001**     | **~3s** |
-
-### Example: Indexing BizGenie Website
-
-- **Pages**: ~50 pages
-- **One-time cost**: ~$0.05 (embeddings only)
-- **Monthly queries** (1000): ~$30 (Claude API)
-- **Storage**: FREE (ChromaDB)
-
----
-
 ## 🗺️ Roadmap
 
 ### ✅ Completed (v1.0)
@@ -190,50 +172,6 @@ Ensure the script tag in `ui/index.html` specifies the full path:
 - [ ] GPT-4 plugin for comparison
 - [ ] Testing framework with metrics
 
-### 🔮 Planned
-
-- [ ] Batch URL indexing (sitemap crawling)
-- [ ] Re-ranking for better precision
-- [ ] Caching layer for faster responses
-- [ ] Authentication & rate limiting
-- [ ] Advanced chunking strategies (semantic, hierarchical)
-- [ ] Multi-language support
-- [ ] Streaming responses
-- [ ] Performance monitoring dashboard
-
----
-
-## 🤝 Contributing
-
-This is currently a private project for BizGenie AI. If you have suggestions or find bugs, please:
-
-1. Check existing issues
-2. Create a new issue with:
-    - Clear description
-    - Steps to reproduce
-    - Expected vs actual behavior
-    - Environment details
-
----
-
-## 📄 License
-
-MIT License - See LICENSE file for details
-
----
-
-## 📚 Additional Resources
-
-- **[PLAN.md](PLAN.md)** - Comprehensive exploration of architecture options
-- **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Detailed implementation strategy
-- **[TODO.md](TODO.md)** - Developer guide with step-by-step instructions
-
-### External Documentation
-- [Jina AI Reader](https://github.com/jina-ai/reader) - Web to markdown converter
-- [Claude API Docs](https://docs.anthropic.com/) - Anthropic's LLM API
-- [ChromaDB Docs](https://docs.trychroma.com/) - Vector database
-- [FastAPI Docs](https://fastapi.tiangolo.com/) - Web framework
-
 ---
 
 ## 💡 Credits
@@ -244,12 +182,6 @@ Built with:
 - [Jina AI](https://jina.ai/) - Web content extraction
 - [ChromaDB](https://www.trychroma.com/) - Vector database
 - [OpenAI](https://openai.com/) - Embeddings API
-
----
-
-## 📧 Contact
-
-For questions or support, reach out to the development team.
 
 ---
 
