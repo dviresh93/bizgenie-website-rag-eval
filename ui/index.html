@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website RAG Chatbot</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f0f2f5; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 800px; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 30px; font-size: 2.2em; }
+        h2 { color: #34495e; font-size: 1.4em; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        section { margin-bottom: 30px; transition: opacity 0.3s ease; }
+        section.disabled { opacity: 0.5; pointer-events: none; }
+
+        form { display: flex; flex-direction: column; gap: 15px; }
+        label { font-weight: 600; color: #555; }
+        
+        input[type="text"], textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, textarea:focus { border-color: #3498db; outline: none; }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        button:hover { background-color: #2980b9; }
+        button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+
+        /* Status Indicators */
+        .status-bar {
+            margin-top: 10px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none; /* Hidden by default */
+            font-weight: 500;
+        }
+        .status-bar.loading { display: block; background-color: #e8f6f3; color: #2980b9; border-left: 4px solid #3498db; }
+        .status-bar.success { display: block; background-color: #dff9fb; color: #27ae60; border-left: 4px solid #2ecc71; }
+        .status-bar.error { display: block; background-color: #fdedec; color: #c0392b; border-left: 4px solid #e74c3c; }
+
+        /* Chat Response */
+        #queryResponse {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #34495e;
+            display: none;
+        }
+        #queryResponse.visible { display: block; }
+        
+        .meta-info { font-size: 0.85em; color: #7f8c8d; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Website RAG Chatbot</h1>
+
+        <section id="indexing-section">
+            <h2>1. Index Website</h2>
+            <form id="indexForm">
+                <label for="urlInput">Enter Website URL:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="urlInput" placeholder="https://example.com" style="flex-grow: 1;" required>
+                    <button type="submit" id="indexBtn">Index</button>
+                </div>
+            </form>
+            <div id="indexStatus" class="status-bar"></div>
+        </section>
+
+        <section id="query-section" class="disabled">
+            <h2>2. Ask Questions</h2>
+            <form id="queryForm">
+                <label for="questionInput">Your Question:</label>
+                <textarea id="questionInput" placeholder="Waiting for indexing to complete..." rows="3" required disabled></textarea>
+                <button type="submit" id="queryBtn" disabled>Ask</button>
+            </form>
+            <div id="queryResponse"></div>
+        </section>
+    </div>
+
+    <script src="/ui/script.js?v=2"></script>
+</body>
+</html>
