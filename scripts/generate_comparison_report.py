@@ -206,8 +206,102 @@ def main():
             f"{combo['hallucinations']} |"
         )
 
+    # Tool Architecture Analysis
+    report_lines.append("\n\n## 🔍 Tool Architecture Analysis\n")
+
+    # Categorize tools
+    jina_combos = [c for c in summary if 'jina' in c['name'].lower()]
+    tavily_combos = [c for c in summary if 'tavily' in c['name'].lower()]
+
+    report_lines.append("\n### MCP Tool Comparison: Search Engine vs Web Scraper\n\n")
+
+    report_lines.append("**Jina AI Reader** = Web Scraper/Content Extractor\n")
+    report_lines.append("- Extracts clean content from specific URLs\n")
+    report_lines.append("- Converts HTML to structured markdown\n")
+    report_lines.append("- Returns full page content from target domain\n")
+    report_lines.append("- Best for: Deep single-site content extraction\n\n")
+
+    report_lines.append("**Tavily AI Search** = AI-Powered Search Engine\n")
+    report_lines.append("- Actively searches web for relevant content\n")
+    report_lines.append("- Uses AI to rank and curate results\n")
+    report_lines.append("- Returns multiple sources with relevance scores\n")
+    report_lines.append("- Best for: Multi-source research, fresh data\n\n")
+
+    # Performance reasoning
+    if jina_combos and tavily_combos:
+        avg_jina_quality = sum(c['avg_quality'] for c in jina_combos) / len(jina_combos)
+        avg_tavily_quality = sum(c['avg_quality'] for c in tavily_combos) / len(tavily_combos)
+        avg_jina_cost = sum(c['avg_total_cost'] for c in jina_combos) / len(jina_combos)
+        avg_tavily_cost = sum(c['avg_total_cost'] for c in tavily_combos) / len(tavily_combos)
+        avg_jina_time = sum(c['avg_search_time'] for c in jina_combos) / len(jina_combos)
+        avg_tavily_time = sum(c['avg_search_time'] for c in tavily_combos) / len(tavily_combos)
+
+        report_lines.append("### Why Performance Differs\n\n")
+
+        # Quality reasoning
+        if avg_jina_quality > avg_tavily_quality:
+            diff = avg_jina_quality - avg_tavily_quality
+            report_lines.append(f"**Quality: Jina {avg_jina_quality:.1f} vs Tavily {avg_tavily_quality:.1f} (+{diff:.1f})**\n")
+            report_lines.append("- Domain-specific questions benefit from full page content extraction\n")
+            report_lines.append("- Jina scrapes bizgenieai.com directly → complete, accurate information\n")
+            report_lines.append("- Tavily returns web snippets → may miss context or return off-topic results\n")
+            report_lines.append("- For known domains, scrapers > search engines for quality\n\n")
+        else:
+            diff = avg_tavily_quality - avg_jina_quality
+            report_lines.append(f"**Quality: Tavily {avg_tavily_quality:.1f} vs Jina {avg_jina_quality:.1f} (+{diff:.1f})**\n")
+            report_lines.append("- Multi-source questions benefit from search engine ranking\n")
+            report_lines.append("- Tavily finds best sources across web → better coverage\n")
+            report_lines.append("- For broad questions, search engines > scrapers\n\n")
+
+        # Cost reasoning
+        cost_diff = avg_tavily_cost - avg_jina_cost
+        report_lines.append(f"**Cost: Jina ${avg_jina_cost:.4f} vs Tavily ${avg_tavily_cost:.4f} ({cost_diff/avg_jina_cost*100:.0f}% difference)**\n")
+        report_lines.append(f"- Jina: ~$0.002/search (or free tier) - simple URL fetch\n")
+        report_lines.append(f"- Tavily: ~$0.012/search - AI-powered web crawling and ranking\n")
+        report_lines.append(f"- Tavily costs {cost_diff/avg_jina_cost:.1f}x more due to search infrastructure\n\n")
+
+        # Speed reasoning
+        if avg_tavily_time < avg_jina_time:
+            diff = avg_jina_time - avg_tavily_time
+            report_lines.append(f"**Speed: Tavily {avg_tavily_time:.2f}s vs Jina {avg_jina_time:.2f}s (-{diff:.2f}s)**\n")
+            report_lines.append("- Search engines cache and pre-index content → faster retrieval\n")
+            report_lines.append("- Web scrapers fetch+parse HTML in real-time → slower\n\n")
+        else:
+            diff = avg_tavily_time - avg_jina_time
+            report_lines.append(f"**Speed: Jina {avg_jina_time:.2f}s vs Tavily {avg_tavily_time:.2f}s (-{diff:.2f}s)**\n")
+            report_lines.append("- Both tools are similarly fast for this use case\n\n")
+
+    # LLM comparison
+    claude_combos = [c for c in summary if 'claude' in c['name'].lower()]
+    gpt4_combos = [c for c in summary if 'gpt4' in c['name'].lower()]
+
+    if claude_combos and gpt4_combos:
+        avg_claude_quality = sum(c['avg_quality'] for c in claude_combos) / len(claude_combos)
+        avg_gpt4_quality = sum(c['avg_quality'] for c in gpt4_combos) / len(gpt4_combos)
+        avg_claude_gen_time = sum(c['avg_gen_time'] for c in claude_combos) / len(claude_combos)
+        avg_gpt4_gen_time = sum(c['avg_gen_time'] for c in gpt4_combos) / len(gpt4_combos)
+
+        report_lines.append("### LLM Comparison: Claude vs GPT-4\n\n")
+
+        if avg_claude_quality > avg_gpt4_quality:
+            diff = avg_claude_quality - avg_gpt4_quality
+            report_lines.append(f"**Quality: Claude {avg_claude_quality:.1f} vs GPT-4 {avg_gpt4_quality:.1f} (+{diff:.1f})**\n")
+            report_lines.append("- Claude shows better reasoning and fewer hallucinations\n")
+        elif avg_gpt4_quality > avg_claude_quality:
+            diff = avg_gpt4_quality - avg_claude_quality
+            report_lines.append(f"**Quality: GPT-4 {avg_gpt4_quality:.1f} vs Claude {avg_claude_quality:.1f} (+{diff:.1f})**\n")
+            report_lines.append("- GPT-4 shows better performance for this use case\n")
+
+        if avg_gpt4_gen_time < avg_claude_gen_time:
+            diff = avg_claude_gen_time - avg_gpt4_gen_time
+            report_lines.append(f"**Speed: GPT-4 {avg_gpt4_gen_time:.2f}s vs Claude {avg_claude_gen_time:.2f}s (-{diff:.2f}s faster)**\n")
+            report_lines.append("- GPT-4 generally has faster inference time\n\n")
+        else:
+            diff = avg_gpt4_gen_time - avg_claude_gen_time
+            report_lines.append(f"**Speed: Claude {avg_claude_gen_time:.2f}s vs GPT-4 {avg_gpt4_gen_time:.2f}s (-{diff:.2f}s faster)**\n\n")
+
     # Detailed Metrics
-    report_lines.append("\n\n## 📊 Detailed Metrics\n")
+    report_lines.append("\n## 📊 Detailed Metrics\n")
 
     for combo in summary:
         report_lines.append(f"\n### {combo['name'].upper()}\n")
