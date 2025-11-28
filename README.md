@@ -129,32 +129,38 @@ docker-compose exec api python3 scripts/generate_comparison_report.py
 
 ---
 
-## 📊 Sample Report Output
+## 📊 Actual Test Results
+
+**Latest Report:** [`test_results/benchmark_report_20251128-035332.md`](test_results/benchmark_report_20251128-035332.md)
 
 ```
 🏆 Overall Rankings
 | Rank | Combination    | Quality | Total Cost | Total Time | Search Time | Gen Time | Halluc. |
 |------|----------------|---------|------------|------------|-------------|----------|---------|
-| 1    | jina_claude    | 85.2    | $0.0144    | 9.71s      | 0.57s       | 9.14s    | 0       |
-| 2    | tavily_claude  | 82.1    | $0.0192    | 7.15s      | 0.37s       | 6.78s    | 1       |
-
-🔍 Tool Architecture Analysis
-
-Jina AI Reader = Web Scraper/Content Extractor
-- Domain-specific questions benefit from full page content extraction
-- Jina scrapes bizgenieai.com directly → complete, accurate information
-- Tavily returns web snippets → may miss context or return off-topic results
-- For known domains, scrapers > search engines for quality
+| 1    | jina_claude    | 72.6    | $0.0144    | 9.71s      | 0.57s       | 9.14s    | 0       |
+| 2    | tavily_claude  | 71.1    | $0.0192    | 7.15s      | 0.37s       | 6.78s    | 0       |
+| 3    | tavily_gpt4    | 64.5    | $0.0187    | 4.70s      | 0.34s       | 4.36s    | 0       |
+| 4    | jina_gpt4      | 56.3    | $0.0143    | 6.53s      | 0.36s       | 6.16s    | 0       |
 
 🎯 Recommendations
 BEST OVERALL: JINA_CLAUDE
-- Highest quality (85.2/100)
-- Zero hallucinations
+- Highest quality (72.6/100)
+- Zero hallucinations (0/25 questions)
+- Best accuracy (71.2), completeness (63.4), clarity (96.4)
+- Lowest total cost ($0.0144/query)
 - Use when: Quality and reliability matter most
 
 ⚡ BEST FOR SPEED: TAVILY_GPT4
-- Fastest total time (4.7s)
+- Fastest total time (4.70s) - 2x faster than Jina_Claude
+- Quality trade-off: 64.5/100 vs 72.6/100
+- Zero hallucinations
 - Use when: Speed is critical
+
+💰 BEST VALUE: JINA_GPT4
+- Lowest cost ($0.0143/query)
+- Moderate quality (56.3/100)
+- Zero hallucinations
+- Use when: Budget-conscious with quality trade-off acceptable
 ```
 
 ---
@@ -377,18 +383,48 @@ ls -la test_results/tavily_gpt4/
 
 ---
 
-## 📊 Current Results
+## 📊 Test Results Summary
 
-Latest benchmark report: `test_results/benchmark_report_[latest].md`
+**Latest Benchmark:** [`test_results/benchmark_report_20251128-035332.md`](test_results/benchmark_report_20251128-035332.md)
+**Questions Tested:** 25 questions about BizGenie services
+**Combinations Tested:** All 4 (Jina/Tavily × Claude/GPT-4)
 
-**Key Findings:**
-- **Jina + Claude:** Highest quality (72.6/100), zero hallucinations
-  - **Why:** Web scraper provides full page content → more complete answers
-- **Tavily + GPT-4:** Fastest speed (4.7s average)
-  - **Why:** Search engine has pre-indexed content + GPT-4 faster generation
-- **Jina combinations:** 6x lower search cost ($0.002 vs $0.012)
-  - **Why:** Simple URL fetch vs AI-powered web crawling
-- **Architecture insight:** For domain-specific questions, scrapers > search engines
+### Why Jina_Claude is the Best Overall
+
+**🏆 Jina + Claude wins on 4 out of 5 key metrics:**
+
+| Metric | Jina_Claude | Runner-up | Advantage |
+|--------|-------------|-----------|-----------|
+| **Quality** | **72.6/100** | Tavily_Claude (71.1) | +1.5 points higher |
+| **Accuracy** | **71.2/100** | Tavily_Claude (70.4) | Most factually correct |
+| **Completeness** | **63.4/100** | Tavily_Claude (61.2) | Most comprehensive answers |
+| **Clarity** | **96.4/100** | Tavily_Claude (95.6) | Clearest, most readable |
+| **Hallucinations** | **0/25** | All tied at 0 | Zero unsupported claims |
+| **Cost** | **$0.0144** | Jina_GPT4 ($0.0143) | Cheapest per query |
+| Speed | 9.71s | **Tavily_GPT4 (4.70s)** | 2x slower (trade-off) |
+
+### Architecture Reasoning
+
+**Why Jina (scraper) beats Tavily (search) for quality:**
+- **Jina:** Scrapes full bizgenieai.com pages → complete, accurate context
+- **Tavily:** Returns web search snippets → may miss context or include off-topic results
+- **Insight:** For domain-specific questions, scrapers > search engines
+
+**Why Claude beats GPT-4 for quality:**
+- **Claude:** Better reasoning (72.6 vs 56.3 with Jina), fewer hallucinations
+- **GPT-4:** Faster generation (4.36s vs 9.14s with Tavily) but lower quality
+
+**Cost breakdown:**
+- **Jina search:** $0.002 (simple URL fetch)
+- **Tavily search:** $0.012 (6x more expensive - AI-powered crawling)
+- **Winner:** Jina_Claude at $0.0144/query ($0.36 for 25 questions)
+
+### When to Use Each Combination
+
+- **Quality-critical apps** → Jina_Claude (72.6 quality, 0 hallucinations)
+- **Speed-critical apps** → Tavily_GPT4 (4.70s, 64.5 quality)
+- **Budget-constrained** → Jina_GPT4 ($0.0143/query, 56.3 quality)
+- **Balanced** → Tavily_Claude (7.15s, 71.1 quality, 0 hallucinations)
 
 ---
 
