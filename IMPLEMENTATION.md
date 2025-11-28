@@ -1,29 +1,95 @@
 # Website RAG System - Modular Implementation Plan
 
-## What We're Building
+## ⚠️ ARCHITECTURAL UPDATE (2025-01-26)
 
-### Understanding the Requirements
+**IMPORTANT: The original implementation was WRONG for our use case.**
 
-Based on our brainstorming session, I understand we are building:
+### What We're Actually Building
 
-**A modular, plugin-based RAG system that allows experimentation with different components to scientifically determine the best approach for answering questions about website content.**
+**A real-time, Perplexity-style search chatbot that uses MCP tools to answer questions with fresh web data.**
 
-### Core Workflow
+**NOT** a static knowledge base. **NOT** a traditional RAG system with pre-indexed content.
+
+### Core Workflow (CORRECTED)
 ```
-URL Input → Data Retrieval → Processing → Storage → Query → Answer Generation
+REAL-TIME APPROACH (What we want):
+User Question → MCP Tool Search (Jina/Tavily) → Fresh Web Data → LLM → Answer
+
+NOT THIS (Old wrong approach):
+URL Input → Data Retrieval → Storage → Query → Answer Generation
 ```
 
 ### Key Design Principles
 
-1. **Swappable Architecture**: Any component can be replaced without touching other parts
-2. **Containerized**: Everything runs in Docker for consistency
-3. **API-Driven**: RESTful endpoints for all operations
-4. **Testable**: Built-in metrics and comparison framework
-5. **UI-Accessible**: Simple web interface for interaction
+1. **Real-time Search**: MCP tools fetch fresh data for each query (not pre-indexed)
+2. **Swappable Architecture**: Any MCP or LLM can be replaced without touching other parts
+3. **Containerized**: Everything runs in Docker for consistency
+4. **API-Driven**: RESTful endpoints for all operations
+5. **Testable**: Built-in metrics and comparison framework (comparing MCP+LLM combinations)
+6. **Perplexity-style**: Each query triggers fresh web search, not static database lookup
 
 ---
 
-## System Architecture
+## Architecture Comparison: Old vs New
+
+### ❌ OLD APPROACH (Static RAG - WRONG)
+
+```mermaid
+graph LR
+    A[Index Phase] --> B[URL]
+    B --> C[MCP Fetch]
+    C --> D[ChromaDB Store]
+
+    E[Query Phase] --> F[Question]
+    F --> G[ChromaDB Retrieve]
+    G --> H[LLM Generate]
+    H --> I[Answer]
+
+    style D fill:#F44336,stroke:#B71C1C,stroke-width:3px,color:#fff
+    style G fill:#F44336,stroke:#B71C1C,stroke-width:3px,color:#fff
+```
+
+**Problems:**
+- MCP tools only used during indexing
+- Queries read from stale ChromaDB data
+- Not real-time, not dynamic
+- Wrong for Perplexity-style search
+
+---
+
+### ✅ NEW APPROACH (Agentic Real-time Search - CORRECT)
+
+```mermaid
+graph TB
+    A[User Question] --> B[LLM Agent]
+    B --> C{Agent Decides}
+    C -->|Needs Search| D[Use Jina Tool]
+    C -->|Needs Search| E[Use Tavily Tool]
+    C -->|Has Info| F[Generate Answer]
+
+    D --> G[Fresh Web Data]
+    E --> G
+    G --> B
+    B --> F
+    F --> H[Answer to User]
+
+    style B fill:#9C27B0,stroke:#4A148C,stroke-width:4px,color:#fff
+    style C fill:#FF9800,stroke:#E65100,stroke-width:3px,color:#fff
+    style D fill:#4CAF50,stroke:#2E7D32,stroke-width:2px,color:#fff
+    style E fill:#4CAF50,stroke:#2E7D32,stroke-width:2px,color:#fff
+```
+
+**Agentic Benefits:**
+- **LLM has agency**: Decides when/how to use tools
+- **Multi-tool usage**: Can use Jina AND Tavily if needed
+- **Iterative search**: Can search multiple times if initial results insufficient
+- **Context-aware**: LLM formulates search queries based on conversation
+- **Tool calling**: Uses Claude/GPT function calling
+- **Matches Perplexity/NotebookLLM**: They use agentic LLMs too!
+
+---
+
+## System Architecture (CORRECTED)
 
 ### High-Level Component View
 
@@ -34,29 +100,24 @@ graph TB
         API[FastAPI Backend]
     end
 
-    subgraph "Plugin Layer - SWAPPABLE"
-        DR[Data Retrieval Plugin Interface]
+    subgraph "Real-time Search Plugins - SWAPPABLE"
+        SEARCH[Search Plugin Interface]
         LLM[LLM Plugin Interface]
     end
 
-    subgraph "Data Retrieval Plugins"
-        JINA[Jina MCP Plugin]
-        TAVILY[Tavily Plugin]
-        FIRE[Firecrawl Plugin]
-        PLAY[Playwright Plugin]
+    subgraph "Search Plugins (MCP Tools)"
+        JINA[Jina MCP - Real-time Reader]
+        TAVILY[Tavily - AI Search]
+        FIRE[Firecrawl - Web Crawler]
     end
 
     subgraph "LLM Plugins"
         GPT4[GPT-4 Plugin]
         CLAUDE[Claude Plugin]
-        LOCAL[Local Model Plugin]
     end
 
-    subgraph "Core Processing Layer - STABLE"
-        CHUNK[Chunking Engine]
-        EMBED[Embedding Generator]
-        STORE[Vector Store - ChromaDB]
-        RETRIEVE[Retrieval Engine]
+    subgraph "Optional Cache Layer"
+        CACHE[ChromaDB - Query Cache]
     end
 
     subgraph "Testing Framework"
@@ -66,34 +127,36 @@ graph TB
     end
 
     UI --> API
-    API --> DR
+    API --> SEARCH
     API --> LLM
 
-    DR --> JINA
-    DR --> TAVILY
-    DR --> FIRE
-    DR --> PLAY
+    SEARCH --> JINA
+    SEARCH --> TAVILY
+    SEARCH --> FIRE
 
     LLM --> GPT4
     LLM --> CLAUDE
-    LLM --> LOCAL
 
-    DR --> CHUNK
-    CHUNK --> EMBED
-    EMBED --> STORE
-    STORE --> RETRIEVE
-    RETRIEVE --> LLM
+    SEARCH -.Optional.-> CACHE
+    CACHE -.Optional.-> SEARCH
+
+    SEARCH --> LLM
 
     API --> METRICS
     METRICS --> COMPARE
     COMPARE --> REPORT
 
-    style DR fill:#FF9800,stroke:#E65100,stroke-width:3px,color:#fff
+    style SEARCH fill:#FF9800,stroke:#E65100,stroke-width:3px,color:#fff
     style LLM fill:#9C27B0,stroke:#4A148C,stroke-width:3px,color:#fff
-    style CHUNK fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
-    style STORE fill:#2196F3,stroke:#0D47A1,stroke-width:3px,color:#fff
+    style CACHE fill:#2196F3,stroke:#0D47A1,stroke-width:2px,stroke-dasharray:5
     style METRICS fill:#F44336,stroke:#B71C1C,stroke-width:3px,color:#fff
 ```
+
+**Key Changes:**
+- MCP tools renamed to "Search Plugins" (more accurate)
+- ChromaDB moved to optional cache layer (dotted lines)
+- Single query flow, no separate indexing phase
+- Real-time search on every request
 
 ---
 
@@ -126,201 +189,404 @@ graph LR
     style H fill:#9C27B0,stroke:#4A148C,stroke-width:2px,color:#fff
 ```
 
-### 2. Data Flow Architecture
+### 2. Data Flow Architecture (CORRECTED for Agentic Real-time)
 
 ```mermaid
 sequenceDiagram
     participant User
     participant API
-    participant Config
-    participant DataPlugin
-    participant Processing
-    participant Storage
-    participant LLMPlugin
+    participant LLMAgent
+    participant JinaTool
+    participant TavilyTool
     participant Metrics
 
-    User->>API: POST /index {url, config}
-    API->>Config: Load active plugins
-    Config-->>API: {data_plugin: "jina", llm: "gpt4"}
+    User->>API: POST /query {question, config}
+    API->>LLMAgent: Initialize with tools (Jina, Tavily)
 
-    API->>DataPlugin: fetch(url)
-    activate DataPlugin
-    DataPlugin-->>API: raw_content
-    deactivate DataPlugin
+    Note over LLMAgent: Agent loop begins
+    activate LLMAgent
 
-    API->>Processing: chunk(content)
-    Processing->>Processing: embed(chunks)
-    Processing->>Storage: store(embeddings)
-    Storage-->>API: index_id
+    LLMAgent->>LLMAgent: Analyze question
+    LLMAgent->>LLMAgent: Decide: Need search?
 
-    API->>Metrics: log_indexing_metrics()
-    API-->>User: {status: "indexed", id: "123"}
+    alt Agent decides to use Jina
+        LLMAgent->>JinaTool: search("What is BizGenie?")
+        JinaTool-->>LLMAgent: Fresh content from bizgenieai.com
+    end
 
-    Note over User,Metrics: Query Phase
+    alt Agent decides to use Tavily
+        LLMAgent->>TavilyTool: search("BizGenie services")
+        TavilyTool-->>LLMAgent: Search results
+    end
 
-    User->>API: POST /query {question, index_id}
-    API->>Storage: retrieve(question, top_k=5)
-    Storage-->>API: relevant_chunks
+    alt Agent needs more info
+        LLMAgent->>TavilyTool: search("BizGenie pricing")
+        TavilyTool-->>LLMAgent: Additional results
+    end
 
-    API->>LLMPlugin: generate(question, context)
-    activate LLMPlugin
-    LLMPlugin-->>API: answer
-    deactivate LLMPlugin
+    LLMAgent->>LLMAgent: Synthesize all results
+    LLMAgent-->>API: Final answer + sources
+    deactivate LLMAgent
 
     API->>Metrics: log_query_metrics()
-    API-->>User: {answer, sources, metrics}
+    API-->>User: {answer, sources, tool_calls, metrics}
+
+    Note over User,Metrics: LLM decides when/how to use tools
 ```
+
+**Key Differences from Old Approach:**
+- ❌ No separate indexing phase
+- ✅ **LLM is in control** (not a pipeline)
+- ✅ Agent decides which tools to use
+- ✅ Can use multiple tools per query
+- ✅ Iterative refinement possible
+- ✅ Tool calling via Claude/GPT function calling
 
 ---
 
 ## Component Specifications
 
-### Component 1: Data Retrieval Plugin Interface
+### Agentic Architecture Explained
 
-**Purpose**: Fetch and extract content from URLs with swappable implementations
+**What does "agentic" mean?**
+
+Instead of a fixed pipeline (User → Search → LLM), the **LLM is in control**:
+
+1. **LLM receives question** and available tools (Jina, Tavily)
+2. **LLM decides** if it needs to search
+3. **LLM formulates** search queries
+4. **LLM uses tools** via function calling
+5. **LLM synthesizes** results into answer
+
+**Example Flow:**
+
+```
+User: "What does BizGenie offer and how much does it cost?"
+
+LLM thinks: "I need to search for BizGenie info"
+LLM calls: jina_search("What is BizGenie")
+→ Gets: Content about BizGenie services
+
+LLM thinks: "I have service info, but need pricing"
+LLM calls: tavily_search("BizGenie pricing")
+→ Gets: Pricing information
+
+LLM thinks: "Now I have everything"
+LLM responds: "BizGenie offers [services] and pricing is [prices]"
+```
+
+**Implementation Approaches:**
+
+1. **Claude with Tool Use** (Recommended)
+   - Native tool calling support
+   - Excellent at deciding when to use tools
+   - Can use multiple tools in sequence
+
+2. **OpenAI Function Calling**
+   - GPT-4 native function calling
+   - Similar to Claude tool use
+
+3. **LangChain Agents**
+   - Framework for building agents
+   - More complex but flexible
+
+**What We'll Build:**
+- Tools are exposed to LLM as functions
+- LLM calls them as needed
+- We execute the tool calls
+- Return results to LLM
+- LLM continues reasoning
+
+---
+
+### Component 1: Tool Interface (for Agentic LLM)
+
+**Purpose**: Provide search capabilities as tools that LLM agents can call
+
+**Tool Definition for LLM**:
+```python
+# How the tool is exposed to Claude/GPT-4
+jina_search_tool = {
+    "name": "jina_search",
+    "description": "Search and read content from websites using Jina AI Reader. Best for reading specific URLs or searching specific domains.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "query": {
+                "type": "string",
+                "description": "Search query or question to find information about"
+            },
+            "url": {
+                "type": "string",
+                "description": "Optional: Specific URL to read. If provided, reads this URL directly."
+            }
+        },
+        "required": ["query"]
+    }
+}
+
+tavily_search_tool = {
+    "name": "tavily_search",
+    "description": "AI-powered web search using Tavily. Best for finding current information across multiple sources on the internet.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "query": {
+                "type": "string",
+                "description": "Search query to find relevant information"
+            },
+            "search_depth": {
+                "type": "string",
+                "enum": ["basic", "advanced"],
+                "description": "Search depth: basic for quick results, advanced for comprehensive search"
+            }
+        },
+        "required": ["query"]
+    }
+}
+```
+
+**Tool Implementation (Backend)**:
+```python
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class ToolResult:
+    """What gets returned to the LLM"""
+    content: str
+    sources: list[str]
+    metadata: dict
+
+class JinaSearchTool:
+    """Jina search tool implementation"""
+
+    def execute(self, query: str, url: Optional[str] = None) -> ToolResult:
+        """
+        Execute Jina search.
+        Called when LLM decides to use jina_search tool.
+        """
+        if url:
+            # Read specific URL
+            content = self.jina_client.read_url(url)
+        else:
+            # Search based on query
+            content = self.jina_client.search(query)
+
+        return ToolResult(
+            content=content,
+            sources=[url] if url else ["jina search results"],
+            metadata={"tool": "jina", "query": query}
+        )
+
+class TavilySearchTool:
+    """Tavily search tool implementation"""
+
+    def execute(self, query: str, search_depth: str = "basic") -> ToolResult:
+        """
+        Execute Tavily search.
+        Called when LLM decides to use tavily_search tool.
+        """
+        results = self.tavily_client.search(query, depth=search_depth)
+
+        return ToolResult(
+            content=results["answer"],
+            sources=results["sources"],
+            metadata={"tool": "tavily", "query": query}
+        )
+```
+
+**Available Tools**:
+
+1. **jina_search**
+   - Read specific URLs
+   - Search within domains
+   - Free tier available
+   - Fast content extraction
+
+2. **tavily_search**
+   - AI-powered web search
+   - Multi-source aggregation
+   - Current information
+   - Paid service
+
+3. **firecrawl_search** (optional)
+   - Deep website crawling
+   - Comprehensive extraction
+   - Paid service
+
+**Configuration Example**:
+```yaml
+# Agent Configuration
+agent:
+  llm: "claude"  # or "gpt4"
+  max_iterations: 5
+  available_tools:
+    - jina_search
+    - tavily_search
+
+# Tool Credentials
+tools:
+  jina_search:
+    api_key: ${JINA_API_KEY}
+    default_domain: "bizgenieai.com"
+
+  tavily_search:
+    api_key: ${TAVILY_API_KEY}
+    search_depth: "advanced"
+    max_results: 5
+```
+
+---
+
+
+### Component 2: Agentic LLM Interface
+
+**Purpose**: LLM agent that controls tools and generates answers
 
 **Interface Definition**:
 ```python
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Dict, Optional
 
 @dataclass
-class StandardDocument:
-    """Standardized document format all plugins must return"""
-    url: str
-    content: str  # Clean markdown/text
-    metadata: Dict
-    timestamp: str
-    source_plugin: str
-
-class DataRetrievalPlugin(ABC):
-    """Base interface all data retrieval plugins must implement"""
-
-    @abstractmethod
-    def fetch_url(self, url: str) -> StandardDocument:
-        """Fetch and process a single URL"""
-        pass
-
-    @abstractmethod
-    def fetch_batch(self, urls: List[str]) -> List[StandardDocument]:
-        """Fetch multiple URLs (optional optimization)"""
-        pass
-
-    @abstractmethod
-    def get_capabilities(self) -> Dict:
-        """Return plugin capabilities (supports_js, rate_limit, etc.)"""
-        pass
-```
-
-**Implementations**:
-
-1. **JinaMCPPlugin**
-   - Uses Jina MCP `read_url` tool
-   - Supports parallel processing via `parallel_read_url`
-   - Free tier with API key
-
-2. **TavilyPlugin**
-   - Uses Tavily search API
-   - Intelligent content discovery
-   - Paid service
-
-3. **FirecrawlPlugin**
-   - Professional web scraping
-   - Full site crawling
-   - Paid service
-
-4. **PlaywrightPlugin**
-   - DIY browser automation
-   - Full control
-   - Free but slower
-
-**Configuration Example**:
-```yaml
-data_retrieval:
-  active: "jina"  # Switch to "tavily", "firecrawl", "playwright"
-
-  jina:
-    api_key: ${JINA_API_KEY}
-    use_parallel: true
-    max_batch_size: 10
-
-  tavily:
-    api_key: ${TAVILY_API_KEY}
-    search_depth: "advanced"
-
-  playwright:
-    headless: true
-    timeout: 30000
-```
-
----
-
-### Component 2: LLM Plugin Interface
-
-**Purpose**: Generate answers with swappable models and prompts
-
-**Interface Definition**:
-```python
-@dataclass
-class StandardResponse:
-    """Standardized response format"""
+class AgentResponse:
+    """Response from agentic LLM"""
     answer: str
     sources: List[str]
-    confidence: float
+    tool_calls: List[Dict]  # What tools the agent used
+    reasoning: Optional[str]  # Agent's thought process
     model_used: str
     tokens_used: int
+    iterations: int  # How many tool-use loops
 
-class LLMPlugin(ABC):
-    """Base interface for LLM plugins"""
+class AgenticLLM(ABC):
+    """Base interface for agentic LLMs"""
 
     @abstractmethod
-    def generate(
+    def run_agent(
         self,
         question: str,
-        context: List[str],
-        prompt_template: Optional[str] = None
-    ) -> StandardResponse:
-        """Generate answer from question and context"""
+        tools: List[Tool],
+        context: Optional[str] = None,
+        max_iterations: int = 5
+    ) -> AgentResponse:
+        """
+        Run agent loop with tool access.
+
+        Args:
+            question: User's question
+            tools: Available tools (Jina, Tavily, etc.)
+            context: Optional context (e.g., "Focus on bizgenieai.com")
+            max_iterations: Max tool-use loops
+
+        Returns:
+            AgentResponse with answer and metadata
+        """
         pass
 
     @abstractmethod
     def get_model_info(self) -> Dict:
-        """Return model information (name, cost, limits)"""
+        """Return model information (name, cost, capabilities)"""
         pass
 ```
 
 **Implementations**:
 
-1. **GPT4Plugin**
-   - OpenAI GPT-4
-   - High quality, paid
+1. **ClaudeAgent** (Recommended)
+   - Claude 3.5 Sonnet
+   - Native tool use support
+   - Excellent reasoning
+   - Paid service
 
-2. **ClaudePlugin**
-   - Anthropic Claude
-   - Alternative to GPT-4
+2. **GPT4Agent**
+   - OpenAI GPT-4 Turbo
+   - Function calling
+   - High quality
+   - Paid service
 
-3. **LocalModelPlugin**
-   - Open-source models
-   - Free, private
+3. **LangChainAgent** (Future)
+   - Framework-based
+   - Flexible but complex
+   - Supports many models
+
+**Example Agent Implementation (Claude)**:
+```python
+class ClaudeAgent(AgenticLLM):
+    """Claude-based agent with tool use"""
+
+    def run_agent(self, question, tools, context=None, max_iterations=5):
+        messages = [{"role": "user", "content": question}]
+        tool_calls = []
+
+        for i in range(max_iterations):
+            # Call Claude with tools
+            response = self.client.messages.create(
+                model="claude-3-5-sonnet-20241022",
+                max_tokens=4096,
+                tools=[tool.to_dict() for tool in tools],
+                messages=messages
+            )
+
+            # If Claude wants to use a tool
+            if response.stop_reason == "tool_use":
+                for tool_use in response.content:
+                    if tool_use.type == "tool_use":
+                        # Execute the tool
+                        result = tools[tool_use.name].execute(**tool_use.input)
+                        tool_calls.append({
+                            "tool": tool_use.name,
+                            "input": tool_use.input,
+                            "result": result
+                        })
+                        # Add result to messages for next iteration
+                        messages.append({
+                            "role": "user",
+                            "content": f"Tool result: {result.content}"
+                        })
+            else:
+                # Agent is done, return answer
+                return AgentResponse(
+                    answer=response.content[0].text,
+                    sources=self._extract_sources(tool_calls),
+                    tool_calls=tool_calls,
+                    model_used="claude-3-5-sonnet",
+                    tokens_used=response.usage.total_tokens,
+                    iterations=i + 1
+                )
+
+        # Max iterations reached
+        return self._fallback_response()
+```
 
 **Configuration Example**:
 ```yaml
-llm:
-  active: "gpt4"  # Switch to "claude", "local"
+agent:
+  llm: "claude"  # or "gpt4"
+  max_iterations: 5
+  temperature: 0.7
+
+  claude:
+    api_key: ${ANTHROPIC_API_KEY}
+    model: "claude-3-5-sonnet-20241022"
+    max_tokens: 4096
 
   gpt4:
     api_key: ${OPENAI_API_KEY}
     model: "gpt-4-turbo-preview"
-    temperature: 0.7
-    max_tokens: 1000
+    max_tokens: 4000
 
-  prompts:
-    system: "You are a helpful assistant..."
-    user_template: "Answer based on context: {context}\n\nQuestion: {question}"
+  system_prompt: |
+    You are a helpful AI assistant with access to web search tools.
+    When answering questions:
+    1. Use tools to find accurate, current information
+    2. Cite your sources
+    3. Be concise and helpful
+    4. If you need more info, use tools multiple times
 ```
 
 ---
+
 
 ### Component 3: Core Processing Pipeline (Stable)
 
@@ -345,6 +611,7 @@ graph LR
 - **Vector Store**: ChromaDB persistent storage
 
 ---
+
 
 ### Component 4: Testing & Comparison Framework
 
@@ -427,6 +694,7 @@ graph TD
 
 ---
 
+
 ## Docker Architecture
 
 ```mermaid
@@ -503,55 +771,23 @@ volumes:
 
 ---
 
-## API Endpoints Design
 
-### Indexing Endpoints
+## API Endpoints Design (CORRECTED)
 
-**POST /api/v1/index**
-```json
-Request:
-{
-  "url": "https://bizgenieai.com",
-  "config_name": "jina_gpt4",  // Uses pre-defined config
-  "options": {
-    "force_refresh": false
-  }
-}
-
-Response:
-{
-  "index_id": "uuid-123",
-  "status": "completed",
-  "metrics": {
-    "pages_indexed": 15,
-    "time_taken": 45.2,
-    "cost": 0.12
-  }
-}
-```
-
-**GET /api/v1/index/{index_id}/status**
-```json
-Response:
-{
-  "index_id": "uuid-123",
-  "status": "completed",
-  "progress": 100,
-  "documents_count": 15
-}
-```
+### ❌ REMOVED: Indexing Endpoints
+No more `/index` endpoint - we don't pre-index content anymore!
 
 ---
 
-### Query Endpoints
+### Query Endpoint (Real-time Search)
 
 **POST /api/v1/query**
 ```json
 Request:
 {
-  "index_id": "uuid-123",
   "question": "What services does BizGenie offer?",
-  "config_name": "jina_gpt4"
+  "search_context": "bizgenieai.com",  // Optional: focus search
+  "config_name": "tavily_gpt4"  // Which search+LLM combo
 }
 
 Response:
@@ -564,15 +800,92 @@ Response:
     }
   ],
   "confidence": 0.92,
+  "search_metadata": {
+    "plugin_used": "tavily",
+    "sources_fetched": 5,
+    "search_time": 1.8
+  },
   "metrics": {
-    "response_time": 2.3,
+    "total_response_time": 3.2,
+    "search_time": 1.8,
+    "llm_time": 1.4,
     "tokens_used": 450,
-    "cost": 0.02
+    "cost": 0.03
   }
 }
 ```
 
+**What happens internally:**
+1. User asks question
+2. Search plugin (Tavily/Jina) does real-time web search
+3. Fresh content returned
+4. LLM generates answer from fresh content
+5. Return answer + sources + metrics
+
 ---
+
+## Testing Methodology (UPDATED for Real-time)
+
+### What Changed in Testing
+
+**OLD Testing (Static RAG):**
+```
+1. Index bizgenieai.com with Config A (Jina)
+2. Ask 25 questions → answers from static DB
+3. Index bizgenieai.com with Config B (Tavily)
+4. Ask same 25 questions → answers from static DB
+5. Compare results
+```
+
+**NEW Testing (Real-time Search):**
+```
+1. Configure Search+LLM combo (e.g., Tavily + GPT4)
+2. Ask question → real-time search → answer
+3. Repeat for all 25 questions
+4. Switch to different combo (e.g., Jina + GPT4)
+5. Ask same 25 questions with real-time search
+6. Compare results
+```
+
+### Metrics to Collect (Updated)
+
+| Metric | Old Approach | New Approach |
+|--------|--------------|--------------|
+| **Indexing time** | ✅ Important | ❌ Not applicable |
+| **Indexing cost** | ✅ Important | ❌ Not applicable |
+| **Search time per query** | N/A | ✅ Critical |
+| **Search quality** | N/A | ✅ Critical |
+| **LLM generation time** | ✅ Important | ✅ Important |
+| **Answer accuracy** | ✅ Important | ✅ Important |
+| **Total cost per query** | ✅ Important | ✅ Important |
+| **Freshness of data** | ❌ Always stale | ✅ Always fresh |
+
+### Testing Framework Changes Needed
+
+**Scripts to Update:**
+1. **run_evaluation.py**
+   - ❌ Remove indexing phase
+   - ✅ Add real-time search per query
+   - ✅ Measure search time + LLM time separately
+
+2. **collect_notebookllm_baseline.py**
+   - ✅ Keep as-is (NotebookLLM does real-time search)
+   - ✅ Matches our new approach!
+
+3. **generate_comparison_report.py**
+   - ✅ Update to compare search quality
+   - ✅ Add search time metrics
+   - ❌ Remove indexing metrics
+
+**Evaluation Focus:**
+- **Search Quality**: Did the search plugin find relevant content?
+- **Search Speed**: How fast did the search return results?
+- **Answer Quality**: Did the LLM generate a good answer?
+- **Total Cost**: Search cost + LLM cost per query
+- **Consistency**: Same answer quality across queries?
+
+---
+
 
 ### Configuration Endpoints
 
@@ -608,6 +921,7 @@ Response:
 
 ---
 
+
 ### Testing Endpoints
 
 **POST /api/v1/test/run**
@@ -641,6 +955,7 @@ Response:
 ```
 
 ---
+
 
 ## Project Structure
 
@@ -724,6 +1039,7 @@ website-rag/
 
 ---
 
+
 ## Implementation Phases
 
 ### Phase 1: Core Infrastructure (Week 1)
@@ -744,6 +1060,7 @@ website-rag/
 - Configuration loading functional
 
 ---
+
 
 ### Phase 2: Jina Plugin Implementation (Week 1-2)
 
@@ -771,6 +1088,7 @@ curl -X POST http://localhost:8000/api/v1/index \
 
 ---
 
+
 ### Phase 3: GPT-4 Plugin & Query Pipeline (Week 2)
 
 **Goal**: Complete query functionality
@@ -790,7 +1108,7 @@ curl -X POST http://localhost:8000/api/v1/index \
 ```bash
 curl -X POST http://localhost:8000/api/v1/query \
   -H "Content-Type: application/json" \
-  -d '{
+  -d '{ 
     "index_id": "uuid-123",
     "question": "What does BizGenie do?",
     "config_name": "jina_gpt4"
@@ -798,6 +1116,7 @@ curl -X POST http://localhost:8000/api/v1/query \
 ```
 
 ---
+
 
 ### Phase 4: Additional Plugins (Week 2-3)
 
@@ -815,6 +1134,7 @@ curl -X POST http://localhost:8000/api/v1/query \
 - Configuration endpoint working
 
 ---
+
 
 ### Phase 5: Testing Framework (Week 3)
 
@@ -853,6 +1173,7 @@ curl -X POST http://localhost:8000/api/v1/query \
 
 ---
 
+
 ### Phase 6: UI Development (Week 3-4)
 
 **Goal**: User-friendly interface
@@ -870,6 +1191,7 @@ curl -X POST http://localhost:8000/api/v1/query \
 - Shows metrics and comparisons
 
 ---
+
 
 ### Phase 7: Polish & Documentation (Week 4)
 
@@ -889,6 +1211,7 @@ curl -X POST http://localhost:8000/api/v1/query \
 - Ready for real testing
 
 ---
+
 
 ## Configuration Management
 
@@ -961,6 +1284,7 @@ processing:
 
 ---
 
+
 ## Testing Strategy
 
 ### Test Execution Flow
@@ -998,6 +1322,7 @@ graph TD
 
 ---
 
+
 ## Success Criteria
 
 ### System is ready when:
@@ -1024,6 +1349,7 @@ graph TD
 
 ---
 
+
 ## Next Steps
 
 Once this implementation plan is approved:
@@ -1035,6 +1361,7 @@ Once this implementation plan is approved:
 5. **Testing**: Run comparisons as we build
 
 ---
+
 
 ## Questions for Clarification
 

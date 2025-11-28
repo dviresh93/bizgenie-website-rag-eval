@@ -4,7 +4,9 @@ Claude (Anthropic) LLM plugin for answer generation.
 from typing import List, Dict, Optional
 from anthropic import Anthropic
 from api.app.plugins.base import LLMPlugin, StandardResponse
+from api.app.core.logging import get_logger
 
+logger = get_logger("claude_plugin")
 
 class ClaudePlugin(LLMPlugin):
     """
@@ -37,6 +39,8 @@ class ClaudePlugin(LLMPlugin):
         Returns:
             StandardResponse with answer
         """
+        logger.info(f"Generating answer with model: {self.model}")
+        
         # Build prompt
         if not prompt_template:
             prompt_template = self._default_prompt_template()
@@ -47,6 +51,8 @@ class ClaudePlugin(LLMPlugin):
             context=context_text,
             question=question
         )
+        
+        logger.info("Calling Claude API...")
 
         # Call Claude API
         try:
@@ -60,6 +66,7 @@ class ClaudePlugin(LLMPlugin):
             )
 
             answer = response.content[0].text
+            logger.info(f"Claude API response received. Tokens: input={response.usage.input_tokens}, output={response.usage.output_tokens}")
 
             # Extract source references (if any)
             sources = self._extract_sources(answer, context)
@@ -73,6 +80,7 @@ class ClaudePlugin(LLMPlugin):
             )
 
         except Exception as e:
+            logger.error(f"Claude API error: {str(e)}")
             raise Exception(f"Claude API error: {str(e)}")
 
     def _default_prompt_template(self) -> str:

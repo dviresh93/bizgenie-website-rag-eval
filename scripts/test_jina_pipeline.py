@@ -2,7 +2,7 @@
 Test script for Jina plugin and document processing pipeline.
 """
 import sys
-sys.path.insert(0, '/home/virus/Documents/repo/bizgenie/website-rag')
+sys.path.insert(0, '/app')
 
 from api.app.plugins.data_retrieval.jina_plugin import JinaPlugin
 from api.app.services.document_processor import DocumentProcessor

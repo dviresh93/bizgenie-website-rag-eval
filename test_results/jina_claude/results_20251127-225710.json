@@ -1,0 +1,352 @@
+[
+  {
+    "question_id": "q1",
+    "question": "What core services does BizGenie provide to businesses?",
+    "answer": "Based on the information provided on the BizGenie website, their core services for businesses include:\n\n1. AI-powered reception services that handle calls, chats, and bookings 24/7. This ensures businesses never miss a customer. (\"Our AI receptionist handles calls, chats, and bookings round-the-clock.\")\n\n2. Voice and chat agent options. Voice agents efficiently handle intake, scheduling and inquiries at scale. Chat agents provide instant, conversational replies 24/7 that can handle complex questions. (\"Choose from Voice or Chat Agent\")\n\n3. Advanced AI technology that understands context and intent to provide natural conversations that convert leads. (\"Advanced AI Technology\")\n\n4. Smart features like intelligent call routing based on needs and agent availability, seamless appointment scheduling, multi-language support, and enterprise-grade security. (\"Powerful Features for Modern Businesses\")\n\n5. Specialized AI reception adapted to various industries like home services, law offices, healthcare, retail and more. (\"Made for Every Industry\")\n\nIn summary, BizGenie's core offering is an always-available AI receptionist service with intelligent voice and chat capabilities to help businesses efficiently handle customer interactions and inquiries around the clock. The service includes advanced features and can be tailored to different industries.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 7.933945178985596,
+      "gen_time": 11.347710847854614,
+      "total_time": 19.28165602684021,
+      "tokens": 1427
+    }
+  },
+  {
+    "question_id": "q2",
+    "question": "How does BizGenie differentiate itself from other AI automation tools?",
+    "answer": "Based on the information from the BizGenie website, there are a few key ways BizGenie differentiates itself from other AI automation tools:\n\n1. Specialized AI receptionists for different industries: BizGenie adapts to the unique needs of various industries like home services, law offices, marketing agencies, healthcare, retail and more. This allows it to provide industry-specific context and support. (\"Made for Every Industry\" section)\n\n2. Advanced natural language AI: BizGenie uses cutting-edge AI that can understand context, tone and intent to provide natural conversations that sound human-like. It offers crystal-clear, natural-sounding AI voices with customizable accents. (\"Advanced AI Technology\" and \"Natural Voice Quality\" under Features)\n\n3. Flexible voice and chat options: Customers can choose to use BizGenie as either an AI voice agent to handle calls or an AI chat agent for live chat and messaging. Both are available 24/7. (\"Choose from Voice or Chat Agent\" section) \n\n4. Comprehensive features: In addition to 24/7 availability, BizGenie offers smart call routing, appointment scheduling, multi-language support, enterprise-grade security, and instant setup. (Listed under \"Powerful Features\")\n\n5. Affordability: BizGenie positions itself as an efficient and cost-effective alternative to hiring human receptionists. The site claims an in-house receptionist costs over $77K while their AI works 24/7 at a lower cost. (Statistics section)\n\nSo in summary, BizGenie aims to stand out through its industry specialization, natural AI interactions, flexible communication channels, broad feature set, and cost efficiency compared to alternatives. The information provided paints BizGenie as a comprehensive, intelligent front office solution.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.32329821586608887,
+      "gen_time": 12.960716962814331,
+      "total_time": 13.28401517868042,
+      "tokens": 1547
+    }
+  },
+  {
+    "question_id": "q3",
+    "question": "What is the primary mission or goal of BizGenie?",
+    "answer": "Based on the information provided on the BizGenie website, the primary mission of BizGenie is to help businesses never miss another customer by providing an AI-powered reception service that handles calls, chats, and bookings round-the-clock. \n\nThe website states: \"Our AI receptionist handles calls, chats, and bookings round-the-clock. Limited early access available this fall \u2014 are you interested?\" This indicates that BizGenie's core goal is to ensure businesses don't miss out on potential customers by having AI receptionists available 24/7 to answer inquiries and handle tasks like scheduling.\n\nThe site also highlights that \"80% of callers hang up if they reach your business voicemail \u2014 and call your competitors instead.\" BizGenie aims to solve this problem by providing \"24/7 call coverage when you sign up for BizGenie \u2014 with AI receptionists available to answer every time.\" \n\nSo in summary, BizGenie's mission is to help businesses capture every lead and potential customer by leveraging AI technology to provide always-available, intelligent reception services. The key value proposition is avoiding missed opportunities that occur when calls go to voicemail or are left unanswered.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.4596221446990967,
+      "gen_time": 10.445383548736572,
+      "total_time": 10.905005693435669,
+      "tokens": 1421
+    }
+  },
+  {
+    "question_id": "q4",
+    "question": "How does BizGenie help businesses improve efficiency or customer engagement?",
+    "answer": "Based on the information from the BizGenie website, there are a few key ways BizGenie helps businesses improve efficiency and customer engagement:\n\n1. BizGenie's AI receptionists are available 24/7 to handle calls, chats, and bookings, so businesses never miss a customer inquiry even outside normal business hours. The website states: \"Never miss a call again. BizGenie works around the clock, handling inquiries even when you're asleep or on vacation.\"\n\n2. The AI technology understands context and intent to provide natural conversations that help convert leads into customers more effectively. As mentioned on the site, BizGenie uses \"Advanced AI Technology\" where the \"AI understands context, tone, and intent to provide natural conversations that convert leads into customers.\"\n\n3. Features like smart call routing based on caller needs and the business team's availability help efficiently direct calls to the right place. The \"Smart Call Routing\" feature provides \"Intelligent call distribution based on caller needs, urgency, and your team's availability and expertise.\"\n\n4. Automated appointment scheduling helps streamline booking and calendar management. BizGenie offers \"Appointment Scheduling\" to \"Seamlessly book appointments, send confirmations, and manage your calendar with smart scheduling algorithms.\"\n\n5. Multi-language support allows businesses to engage customers in their preferred language. The website highlights \"Multi-Language Support\" with \"support for 50+ languages and regional dialects.\"\n\nSo in summary, BizGenie's always-on AI agents, natural conversations, intelligent call routing and scheduling, and multi-language capabilities help businesses be more responsive and efficient in handling customer inquiries and bookings across voice and chat channels. This enables them to capture more leads and provide better service.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.3708171844482422,
+      "gen_time": 14.503531694412231,
+      "total_time": 14.874348878860474,
+      "tokens": 1533
+    }
+  },
+  {
+    "question_id": "q5",
+    "question": "Does BizGenie offer features for managing appointments or bookings?",
+    "answer": "Yes, BizGenie offers appointment scheduling as one of its powerful features. According to the information on their website:\n\n\"Appointment Scheduling: Seamlessly book appointments, send confirmations, and manage your calendar with smart scheduling algorithms.\"\n\nSo the BizGenie AI receptionist can handle scheduling appointments and managing your calendar on your behalf. It uses intelligent scheduling algorithms to streamline the booking process, send appointment confirmations to clients, and keep your schedule organized.\n\nThe website positions appointment scheduling as one of the key features that makes BizGenie well-suited for modern businesses across a variety of industries. By automating appointment bookings 24/7, BizGenie ensures you never miss an opportunity to serve a customer or client due to scheduling issues.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.2810182571411133,
+      "gen_time": 7.346864938735962,
+      "total_time": 7.627883195877075,
+      "tokens": 1318
+    }
+  },
+  {
+    "question_id": "q6",
+    "question": "How does BizGenie describe the quality or style of its AI voices?",
+    "answer": "According to the information on the BizGenie website, their AI receptionists provide \"Natural Voice Quality\" with \"Crystal-clear, natural-sounding AI voices that customers love, with customizable accents and tones.\"\n\nSpecifically, the \"Powerful Features for Modern Businesses\" section states:\n\n\"Natural Voice Quality\nCrystal-clear, natural-sounding AI voices that customers love, with customizable accents and tones.\"\n\nSo in summary, BizGenie describes the quality and style of its AI voices as natural-sounding, crystal-clear, and able to be customized in terms of accent and tone to provide voices that customers will appreciate.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.3832054138183594,
+      "gen_time": 6.139686822891235,
+      "total_time": 6.522892236709595,
+      "tokens": 1303
+    }
+  },
+  {
+    "question_id": "q7",
+    "question": "Can BizGenie agents be customized to match a specific brand voice or script?",
+    "answer": "Yes, BizGenie's AI receptionists can be customized to match your specific brand voice and script. According to the information on their website, BizGenie offers \"customizable accents and tones\" for their natural-sounding AI voices. This allows you to tailor the AI agent's personality to align with your brand identity.\n\nAdditionally, the website states that \"BizGenie adapts to your industry's unique needs, providing specialized AI reception services that understand your business context.\" This suggests that the AI can be trained on your company's specific products, services, policies and procedures to handle calls and chats according to your preferred script and brand guidelines.\n\nSo in summary, BizGenie provides the flexibility to customize the AI receptionist's voice, tone and knowledge base to authentically represent your unique brand when interacting with customers.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.5065579414367676,
+      "gen_time": 7.029968738555908,
+      "total_time": 7.536526679992676,
+      "tokens": 1341
+    }
+  },
+  {
+    "question_id": "q8",
+    "question": "Does BizGenie handle inbound calls, outbound calls, or both?",
+    "answer": "Based on the information provided on the BizGenie website, it appears that BizGenie primarily handles inbound calls and customer inquiries as an AI-powered reception service. The website states:\n\n\"Our AI receptionist handles calls, chats, and bookings round-the-clock.\" \n\nIt also mentions features like \"24/7 call coverage\", \"Smart Call Routing\" based on caller needs and team availability, and the ability to \"Seamlessly book appointments, send confirmations, and manage your calendar\".\n\nHowever, there is no explicit mention of outbound calling capabilities. The focus seems to be on efficiently handling incoming customer contacts through voice and chat agents to provide 24/7 responsiveness and lead qualification.\n\nSo in summary, while BizGenie excels at managing inbound calls and chats, the website does not specify that it performs outbound calls as part of its AI reception service. The core value proposition is ensuring businesses never miss an inbound customer contact.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.3753817081451416,
+      "gen_time": 8.567832231521606,
+      "total_time": 8.943213939666748,
+      "tokens": 1371
+    }
+  },
+  {
+    "question_id": "q9",
+    "question": "Is there a feature for sending SMS or text follow-ups?",
+    "answer": "Based on the information provided on the BizGenie website, there is no specific mention of a feature for sending SMS or text follow-ups to customers. The website focuses primarily on AI-powered voice and chat reception services to handle inbound calls and inquiries.\n\nSome of the key features highlighted include:\n- 24/7 call coverage \n- Intelligent call routing\n- Appointment scheduling\n- Multi-language support\n\nHowever, the ability to send outbound SMS or text messages as follow-ups is not explicitly listed as a feature or capability. The website content is more geared towards how BizGenie's AI receptionists can handle incoming customer interactions efficiently.\n\nIt's possible this feature may be supported or could be discussed further with their team, but I did not see clear evidence of SMS/text follow-ups as a standard feature based on the details provided on their main website pages. I would recommend contacting BizGenie directly to inquire about this specific capability if it is an important requirement for your business.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.5247623920440674,
+      "gen_time": 8.07011103630066,
+      "total_time": 8.594873428344727,
+      "tokens": 1374
+    }
+  },
+  {
+    "question_id": "q10",
+    "question": "Does BizGenie provide reporting or analytics on call handling and customer interactions?",
+    "answer": "Based on the information provided on the BizGenie website, there are no specific details mentioned about reporting or analytics capabilities for call handling and customer interactions. The website focuses primarily on the AI receptionist service features like 24/7 availability, smart call routing, appointment scheduling, and natural language processing. \n\nWhile analytics and reporting are common features offered by many customer service and call handling platforms, the BizGenie website does not explicitly state whether their service includes these capabilities at this time. It's possible they may offer reporting and analytics, but it cannot be confirmed definitively based solely on the information retrieved from their website homepage and key feature sections.\n\nTo get a definitive answer, I would recommend contacting BizGenie directly via their website contact form or demo booking option to inquire about reporting and analytics features. Their sales team should be able to provide more specific details on the full capabilities of their AI receptionist platform.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.2709498405456543,
+      "gen_time": 7.407864093780518,
+      "total_time": 7.678813934326172,
+      "tokens": 1352
+    }
+  },
+  {
+    "question_id": "q11",
+    "question": "Can BizGenie handle multiple calls simultaneously?",
+    "answer": "Based on the information provided on the BizGenie website, it does not explicitly state whether the AI receptionist service can handle multiple calls simultaneously. However, a few key points suggest that BizGenie is designed to efficiently handle a high volume of customer inquiries:\n\n1. The website states that BizGenie \"handles calls, chats, and bookings round-the-clock\" and that businesses will \"Never miss another customer\". This implies the service has the capacity to manage incoming calls and chats without missing any, even during high-traffic periods.\n\n2. BizGenie offers \"Smart Call Routing\" which provides \"Intelligent call distribution based on caller needs, urgency, and your team's availability and expertise.\" This feature indicates the system can efficiently route and manage multiple incoming calls.\n\n3. The service is promoted as an alternative to hiring an in-house receptionist, with the advantage of 24/7 availability. This suggests BizGenie can handle the call volume that would typically be managed by one or more human receptionists.\n\nWhile not definitively stated, these points strongly imply that BizGenie is capable of handling multiple calls simultaneously as an enterprise-grade AI reception service. For a more concrete answer, it would be best to contact BizGenie directly or schedule a demo to discuss the specific capabilities and limitations of their service.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.26799964904785156,
+      "gen_time": 10.51910400390625,
+      "total_time": 10.787103652954102,
+      "tokens": 1443
+    }
+  },
+  {
+    "question_id": "q12",
+    "question": "What third-party systems or platforms does BizGenie integrate with?",
+    "answer": "Based on the information provided on the BizGenie website, it does not explicitly mention any specific third-party systems or platforms that BizGenie integrates with. The website focuses on describing BizGenie's AI receptionist capabilities and features, but does not go into technical details about integrations.\n\nThe closest relevant information I could find is:\n\n\"Instant Setup\nGet up and running in minutes, not weeks. No complex integrations or lengthy training required.\"\n\nThis suggests BizGenie is designed to be easy to set up without requiring complex integrations. However, it does not rule out the possibility that BizGenie may offer some integrations.\n\nWithout more details provided on their website, I do not have enough information to definitively say what, if any, third-party integrations BizGenie currently supports. The website encourages booking a demo to learn more, so reaching out to their sales team directly may be the best way to get a clear answer on integration capabilities for your specific needs.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.9176487922668457,
+      "gen_time": 9.000371932983398,
+      "total_time": 9.918020725250244,
+      "tokens": 1372
+    }
+  },
+  {
+    "question_id": "q13",
+    "question": "Does BizGenie integrate with GoHighLevel (GHL)?",
+    "answer": "Based on the information retrieved from the BizGenie website, there is no specific mention of integration with GoHighLevel (GHL). The website highlights BizGenie's features such as advanced AI technology, 24/7 availability, smart call routing, appointment scheduling, and instant setup. However, it does not provide details on which specific third-party platforms or software BizGenie integrates with.\n\nGiven the lack of information about GoHighLevel integration, I would recommend contacting BizGenie directly to inquire about potential integrations or compatibility with GoHighLevel. The website provides a phone number ((425) 683-1214) and an option to \"Book a Demo\", which would allow you to speak with a representative who can provide more details on their platform's integration capabilities.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.2746427059173584,
+      "gen_time": 6.4505743980407715,
+      "total_time": 6.72521710395813,
+      "tokens": 1325
+    }
+  },
+  {
+    "question_id": "q14",
+    "question": "Is there an API available for developers to connect with BizGenie?",
+    "answer": "Based on the information provided on the BizGenie website, there are no specific details about an API for developers to connect with their AI receptionist service. The website focuses primarily on the end-user features and benefits of the service, such as 24/7 availability, smart call routing, appointment scheduling, and multi-language support. It does not appear to include any developer-focused documentation or information about APIs.\n\nHowever, the lack of API information on the main website does not necessarily mean an API is not available. Many SaaS companies offer APIs for integration and customization, even if not prominently advertised. \n\nTo get a definitive answer, I would recommend contacting BizGenie directly through their sales or support channels. The website lists a phone number (425-683-1214) and has a \"Book a Demo\" call-to-action, which could connect you with a sales representative who can clarify if they have an API available for developers. Alternatively, they may have more technical documentation available after signing up for an account.\n\nIn summary, while an API is not explicitly mentioned on the BizGenie website based on the provided information, the best way to confirm API availability would be to contact the company directly for the most accurate and up-to-date information.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.4379866123199463,
+      "gen_time": 9.765444040298462,
+      "total_time": 10.203430652618408,
+      "tokens": 1431
+    }
+  },
+  {
+    "question_id": "q15",
+    "question": "How does BizGenie ensure data security and privacy?",
+    "answer": "Based on the information retrieved from the BizGenie website, they ensure data security and privacy in the following ways:\n\n1. Enterprise Security: BizGenie uses \"bank-level encryption and HIPAA compliance\" to keep customer data private and secure. (Source: \"Powerful Features for Modern Businesses\" section)\n\n2. Compliance: The website footer indicates that BizGenie is \"SOC 2 Compliant, HIPAA Compliant, GDPR Ready\". This means they adhere to strict security and privacy standards required by these regulations. (Source: Website footer)\n\nSo in summary, BizGenie protects customer data through strong encryption, HIPAA compliance for handling sensitive health information, SOC 2 compliance demonstrating robust security practices, and readiness for GDPR data privacy regulations. The specific mention of these security measures and certifications on their website shows they take data protection very seriously as a core part of their AI receptionist service.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.2862100601196289,
+      "gen_time": 8.69271445274353,
+      "total_time": 8.97892451286316,
+      "tokens": 1366
+    }
+  },
+  {
+    "question_id": "q16",
+    "question": "What kind of businesses or industries is BizGenie designed for?",
+    "answer": "Based on the information retrieved from the BizGenie website, BizGenie is designed to serve a wide range of industries and business types. The website specifically mentions that BizGenie adapts to each industry's unique needs, providing specialized AI reception services that understand the specific business context.\n\nThe industries explicitly listed on the website include:\n\n1. Home Services (contractors, cleaning services, landscaping, maintenance)\n2. Law Offices (legal practices, attorney firms, consultation services) \n3. Marketing Agencies (digital agencies, consultants, creative services)\n4. Pet Services (veterinary clinics, pet grooming, boarding, training)\n5. Property Management (real estate, property managers, rental services)\n6. Salons & Spas (beauty salons, spas, wellness centers, personal care) \n7. Healthcare (medical practices, clinics, therapy centers, wellness providers)\n8. Automotive (auto repair shops, dealerships, automotive service centers)\n9. Retail (online stores, boutiques, customer service operations)\n10. Professional Services (consulting, accounting, IT, business solutions)\n11. Education (schools, training centers, tutoring, educational institutions) \n12. Food & Beverage (restaurants, catering, food delivery, hospitality)\n\nSo in summary, BizGenie is designed to cater to a broad spectrum of businesses across many different industries, with specialized AI reception services tailored to each industry's specific needs and context.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 1.6179673671722412,
+      "gen_time": 12.068624258041382,
+      "total_time": 13.686591625213623,
+      "tokens": 1480
+    }
+  },
+  {
+    "question_id": "q17",
+    "question": "Can dental or medical offices use BizGenie for scheduling?",
+    "answer": "Yes, dental and medical offices can absolutely use BizGenie for scheduling appointments. The website specifically lists \"Healthcare\" as one of the industries BizGenie serves, stating:\n\n\"Healthcare - Medical practices, clinics, therapy centers, and wellness providers.\"\n\nBizGenie's AI receptionists are able to handle appointment scheduling for healthcare practices like dental and medical offices. The site mentions that BizGenie provides \"Seamless appointment booking, confirmations, and calendar management with smart scheduling algorithms.\"\n\nAdditionally, BizGenie is HIPAA compliant, which is a key requirement for any technology used in the healthcare industry to protect patient privacy and data security. The website states \"Enterprise Security - Bank-level encryption and HIPAA compliance ensure your customer data stays private and secure.\"\n\nSo in summary, dental and medical offices can confidently use BizGenie's AI receptionist service for 24/7 call handling, appointment scheduling, and patient inquiries while meeting the strict security and privacy standards required in healthcare. The service is tailored to adapt to the unique needs of healthcare practices.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 2.2378897666931152,
+      "gen_time": 8.570696115493774,
+      "total_time": 10.80858588218689,
+      "tokens": 1389
+    }
+  },
+  {
+    "question_id": "q18",
+    "question": "Is BizGenie suitable for real estate agents or agencies?",
+    "answer": "Yes, BizGenie is well-suited for real estate agencies and property management companies. According to the information on their website, BizGenie \"adapts to your industry's unique needs, providing specialized AI reception services that understand your business context.\" \n\nSpecifically, they list \"Property Management\" as one of the industries they serve, which includes \"Real estate agencies, property managers, and rental services.\"\n\nSome of the features that would be especially useful for real estate include:\n\n- 24/7 availability to handle inquiries from potential buyers/renters at any time\n- Appointment scheduling to easily book property showings \n- Smart call routing to connect high-priority leads with available agents\n- Multi-language support to serve a diverse client base\n\nSo in summary, BizGenie's AI receptionists are designed to understand the specific needs and terminology of the real estate industry to provide high-quality customer service that helps agencies capture more leads and clients. The information on their website indicates they have solutions tailored for property management and real estate agencies.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.24585556983947754,
+      "gen_time": 8.888357877731323,
+      "total_time": 9.1342134475708,
+      "tokens": 1380
+    }
+  },
+  {
+    "question_id": "q19",
+    "question": "What are the initial steps for a new business to begin using BizGenie?",
+    "answer": "Based on the information provided on the BizGenie website, here are the initial steps for a new business to start using their AI receptionist service:\n\n1. Book a demo: The website prominently features a \"Book a Demo\" call-to-action button, indicating that interested businesses should first schedule a demonstration to learn more about the service. (Source: https://bizgenieai.com/)\n\n2. Choose between Voice or Chat Agent: BizGenie offers two main options - an AI-powered Voice Agent for efficient call handling, or a Chat Agent for instant replies and personalized support. The business would need to decide which option best suits their needs. (Source: \"Choose from Voice or Chat Agent\" section on https://bizgenieai.com/)\n\n3. Get set up instantly: The website mentions \"Instant Setup\", stating that businesses can \"Get up and running in minutes, not weeks. No complex integrations or lengthy training required.\" This suggests that after choosing a plan, a new client can start using the service very quickly. (Source: \"Powerful Features for Modern Businesses\" section on https://bizgenieai.com/)\n\nSo in summary, the key initial steps seem to be: \n1) Book a demo\n2) Choose between the Voice or Chat agent options\n3) Complete the instant setup process to start using the AI receptionist service right away\n\nThe website does not provide more specific details on the exact signup flow, but emphasizes the ease and speed of getting started with BizGenie for new customers.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.2772088050842285,
+      "gen_time": 12.080615997314453,
+      "total_time": 12.357824802398682,
+      "tokens": 1488
+    }
+  },
+  {
+    "question_id": "q20",
+    "question": "What kind of support is available if I encounter issues with BizGenie?",
+    "answer": "Based on the information provided on the BizGenie website, there are no specific details about customer support options if you encounter issues with the service. The website focuses primarily on the AI receptionist capabilities and features.\n\nHowever, as a customer-focused service, it's very likely that BizGenie provides customer support through channels like email, phone or live chat to assist with any technical issues, account questions, or general inquiries. Most SaaS companies offer some level of customer support, even if the specifics are not listed on their marketing website.\n\nTo get a definitive answer, I would recommend contacting BizGenie directly via their phone number listed at the top of the page (425-683-1214) or using the \"Book a Demo\" option to speak with a sales representative who can provide more details on the support and service plans available. They should be able to clarify what type of customer support is included with a BizGenie subscription.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.9267745018005371,
+      "gen_time": 8.045236349105835,
+      "total_time": 8.972010850906372,
+      "tokens": 1362
+    }
+  },
+  {
+    "question_id": "q21",
+    "question": "Is there a free trial or demo available for new users?",
+    "answer": "Based on the information provided on the BizGenie website, there is a limited early access available this fall for trying out their AI receptionist service. The site states:\n\n\"Limited early access available this fall \u2014 are you interested? Book a Demo\"\n\nWhile it does not explicitly mention a free trial, the site does offer the ability to book a demo to see how the service works. To get more details on the demo and whether a free trial period is available, I would recommend clicking the prominent \"Book a Demo\" button on the homepage and providing your contact information. A BizGenie representative should then reach out with more specifics on demo options and any potential trial offers for new customers.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.3821408748626709,
+      "gen_time": 6.282737731933594,
+      "total_time": 6.664878606796265,
+      "tokens": 1300
+    }
+  },
+  {
+    "question_id": "q22",
+    "question": "What are the pricing plans or cost structure for BizGenie?",
+    "answer": "I apologize, but based on the information provided from the BizGenie website, no specific pricing plans or cost details are mentioned. The website talks about BizGenie's AI receptionist service features and benefits, but does not go into the pricing structure or plan options at this time.\n\nThe site does mention \"Limited early access available this fall\" which suggests the service may still be in a pre-launch phase. There is also a prominent \"Book a Demo\" call-to-action, likely to allow interested potential customers to get more information, potentially including pricing, through a personalized demo.\n\nWithout more details provided publicly on their website, the exact costs and pricing model for BizGenie's service remain unclear based solely on the information retrieved. To get accurate pricing, the best path would be contacting the company directly to request those specifics or to book a demo to learn more.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.29316067695617676,
+      "gen_time": 7.531000375747681,
+      "total_time": 7.824161052703857,
+      "tokens": 1344
+    }
+  },
+  {
+    "question_id": "q23",
+    "question": "Are there any setup fees associated with BizGenie?",
+    "answer": "Based on the information provided on the BizGenie website, there are no details mentioned about any setup fees. The website states \"Instant Setup\" as one of the features, explaining that you can \"Get up and running in minutes, not weeks. No complex integrations or lengthy training required.\"\n\nWhile this suggests there are likely no setup fees or a complicated onboarding process, the website does not explicitly confirm the absence of setup fees. To get a definitive answer, I would recommend contacting BizGenie directly via their demo booking option or the provided phone number to inquire about any potential setup costs before signing up for the service.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.3135209083557129,
+      "gen_time": 5.716446876525879,
+      "total_time": 6.029967784881592,
+      "tokens": 1290
+    }
+  },
+  {
+    "question_id": "q24",
+    "question": "Does BizGenie offer a mobile app for managing the AI?",
+    "answer": "Based on the information provided on the BizGenie website, there is no mention of a mobile app for managing the AI receptionist service. The website focuses on describing the core features and benefits of the AI-powered voice and chat agents, such as 24/7 availability, smart call routing, appointment scheduling, and multi-language support. However, it does not specify if there is a dedicated mobile app for customers to manage the AI receptionist.\n\nThe website states \"Instant Setup - Get up and running in minutes, not weeks. No complex integrations or lengthy training required.\" This suggests the setup process is quick and easy, but does not confirm the existence of a mobile management app.\n\nWithout additional information directly confirming a mobile app, I do not have enough evidence to definitively say whether BizGenie offers one or not based solely on the details provided on the homepage of their website. The customer would likely need to contact BizGenie sales or support directly to get a clear answer on mobile app availability.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.8768854141235352,
+      "gen_time": 8.812222719192505,
+      "total_time": 9.68910813331604,
+      "tokens": 1370
+    }
+  },
+  {
+    "question_id": "q25",
+    "question": "Can BizGenie translate calls into different languages in real-time?",
+    "answer": "Based on the information provided on the BizGenie website, their AI receptionists offer multi-language support for over 50 languages and regional dialects. Specifically, the website states:\n\n\"Multi-Language Support\nServe customers in their preferred language with support for 50+ languages and regional dialects.\"\n\nHowever, it does not explicitly mention real-time translation of calls. The multi-language support likely means the AI can communicate fluently in many languages, but it's unclear if it can dynamically translate between languages during a live call.\n\nTo get a definitive answer, I would recommend contacting BizGenie directly via their demo booking form or provided phone number to inquire about real-time call translation capabilities. The BizGenie team should be able to clarify the exact scope of their multi-language support.",
+    "sources": [
+      "https://bizgenieai.com/"
+    ],
+    "metrics": {
+      "search_time": 0.28723597526550293,
+      "gen_time": 7.010595798492432,
+      "total_time": 7.297831773757935,
+      "tokens": 1336
+    }
+  }
+]

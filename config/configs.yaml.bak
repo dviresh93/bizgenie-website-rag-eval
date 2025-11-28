@@ -1,0 +1,64 @@
+# Active configuration (legacy/default)
+active_config: "jina_claude"
+
+# Modular Component Profiles
+retrieval_profiles:
+  jina:
+    name: "Jina AI Reader"
+    plugin: "jina"
+    api_key: ${JINA_API_KEY}
+    options:
+      use_parallel: true
+      batch_size: 10
+  
+  tavily:
+    name: "Tavily Search"
+    plugin: "tavily"
+    api_key: ${TAVILY_API_KEY}
+    options:
+      include_raw_content: true
+
+llm_profiles:
+  claude:
+    name: "Claude 3.5 Sonnet"
+    plugin: "claude"
+    api_key: ${ANTHROPIC_API_KEY}
+    options:
+      model: "claude-3-5-sonnet-20240620"
+      temperature: 0.7
+      max_tokens: 1000
+  
+  gpt4:
+    name: "GPT-4 Turbo"
+    plugin: "gpt4"
+    api_key: ${OPENAI_API_KEY}
+    options:
+      model: "gpt-4-turbo-preview"
+      temperature: 0.7
+      max_tokens: 1000
+
+# Presets (Legacy support + easy combinations)
+configurations:
+  jina_claude:
+    name: "Jina + Claude"
+    description: "Default preset"
+    retrieval_profile: "jina"
+    llm_profile: "claude"
+
+# Processing settings (stable across all configs)
+processing:
+  chunking:
+    strategy: "markdown"
+    chunk_size: 500
+    chunk_overlap: 50
+
+  embedding:
+    provider: "openai"
+    model: "text-embedding-3-small"
+    api_key: ${OPENAI_API_KEY}
+
+  storage:
+    type: "chromadb"
+    host: "localhost"
+    port: 8001
+    persist_directory: "/app/data/chromadb"

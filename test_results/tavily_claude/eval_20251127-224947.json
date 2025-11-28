@@ -1,0 +1,177 @@
+[
+  {
+    "question_id": "q1",
+    "question": "What core services does BizGenie provide to businesses?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDWJ7tdrpoicE7mM384'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q2",
+    "question": "How does BizGenie differentiate itself from other AI automation tools?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDWNyb7nKx1QSvWFpMK'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q3",
+    "question": "What is the primary mission or goal of BizGenie?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDWTs2QreVeeCM5ZW4G'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q4",
+    "question": "How does BizGenie help businesses improve efficiency or customer engagement?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDWYgVd6Uy2L1LbL7VE'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q5",
+    "question": "Does BizGenie offer features for managing appointments or bookings?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDWdag2in737GtseTgN'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q6",
+    "question": "How does BizGenie describe the quality or style of its AI voices?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDWiuu76unGGyuFGWEx'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q7",
+    "question": "Can BizGenie agents be customized to match a specific brand voice or script?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDWowWmT5g7wgu49qPf'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q8",
+    "question": "Does BizGenie handle inbound calls, outbound calls, or both?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDWtxdfkrWSyQhk1rBN'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q9",
+    "question": "Is there a feature for sending SMS or text follow-ups?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDWyoLgW9osS3ZzYZbx'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q10",
+    "question": "Does BizGenie provide reporting or analytics on call handling and customer interactions?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDX4kVhCHAYxJYbXekR'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q11",
+    "question": "Can BizGenie handle multiple calls simultaneously?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDX9ZiUFh4KYAA7ZoaV'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q12",
+    "question": "What third-party systems or platforms does BizGenie integrate with?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXEX7uzuYW6fJZRDEx'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q13",
+    "question": "Does BizGenie integrate with GoHighLevel (GHL)?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXKTn8VrWdqCqW2bG7'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q14",
+    "question": "Is there an API available for developers to connect with BizGenie?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXQPCZnKmxFd4C25BP'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q15",
+    "question": "How does BizGenie ensure data security and privacy?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXVHskJk3fVGxZYTkx'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q16",
+    "question": "What kind of businesses or industries is BizGenie designed for?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXa8LTVzhhxK4eJ1Mw'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q17",
+    "question": "Can dental or medical offices use BizGenie for scheduling?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXf2GGQDaSJE96oVPb'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q18",
+    "question": "Is BizGenie suitable for real estate agents or agencies?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXjuhTrR3z6au522oh'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q19",
+    "question": "What are the initial steps for a new business to begin using BizGenie?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXptM1Zx2MQPJhLnK3'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q20",
+    "question": "What kind of support is available if I encounter issues with BizGenie?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXukYD3LYr13TcPuLM'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q21",
+    "question": "Is there a free trial or demo available for new users?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDXzaFxUgWkLtfoKJH4'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q22",
+    "question": "What are the pricing plans or cost structure for BizGenie?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDY5QTs3Vb6qJBndnu7'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q23",
+    "question": "Are there any setup fees associated with BizGenie?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDYAGfQ9CGVcHkZxDQ6'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q24",
+    "question": "Does BizGenie offer a mobile app for managing the AI?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDYFBawGJ7dwY4gn4PG'}",
+    "score": 0,
+    "verdict": "ERROR"
+  },
+  {
+    "question_id": "q25",
+    "question": "Can BizGenie translate calls into different languages in real-time?",
+    "error": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}, 'request_id': 'req_011CVZDYL3Xy4VRFKZmwGXZs'}",
+    "score": 0,
+    "verdict": "ERROR"
+  }
+]

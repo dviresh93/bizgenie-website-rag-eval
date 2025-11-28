@@ -6,9 +6,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles # Added
 from fastapi.responses import HTMLResponse # Added
 from api.app.api.v1.endpoints import rag
+from api.app.core.logging import setup_logging
+
+# Initialize logging
+logger = setup_logging()
 
 # Import plugins to register them
-from api.app.plugins.data_retrieval import jina_plugin
+from api.app.plugins.data_retrieval import jina_plugin, tavily_plugin
 from api.app.plugins.llm import claude_plugin
 
 app = FastAPI(
@@ -40,4 +44,5 @@ async def serve_ui():
 @app.get("/health")
 async def health():
     """Health check endpoint"""
+    logger.debug("Health check called")
     return {"status": "healthy"}

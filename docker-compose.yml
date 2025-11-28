@@ -13,7 +13,8 @@ services:
       - ./api/app:/workspace/api/app
       - ./scripts:/workspace/scripts
       - ./config:/workspace/config
-      - ./ui:/workspace/ui # Added
+      - ./ui:/workspace/ui
+      - ./test_results:/workspace/test_results # Added test_results mount
     depends_on:
       - chromadb
 

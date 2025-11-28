@@ -1,0 +1,93 @@
+======================================================================
+MCP TOOL + LLM COMPARISON REPORT (2025-11-28 02:24:48)
+======================================================================
+
+📊 OVERALL RANKINGS
+----------------------------------------------------------------------
+#    COMBINATION          SCORE      FOUND MORE      HALLUC.   
+----------------------------------------------------------------------
+1    jina_claude          36.3       13/0 (0%)       0         
+2    jina_gpt4            28.1       7/0 (0%)        0         
+3    tavily_claude        23.7       11/0 (0%)       0         
+4    tavily_gpt4          21.5       9/0 (0%)        0         
+
+======================================================================
+DETAILED BREAKDOWN
+======================================================================
+
+JINA_CLAUDE
+----------------------------------------------------------------------
+Average Score: 36.3/100
+
+Search Power (questions where baseline had NO info):
+  - Total 'no info' questions: 0
+  - Found MORE than baseline: 13 (0.0%) 🎯
+  - Tied with baseline: 0
+
+Quality (questions where baseline HAD info):
+  - Total 'has info' questions: 50
+  - Better than baseline: 0
+  - Matches baseline: 0
+
+Reliability:
+  - Hallucinations: 0 (✅ LOW)
+
+JINA_GPT4
+----------------------------------------------------------------------
+Average Score: 28.1/100
+
+Search Power (questions where baseline had NO info):
+  - Total 'no info' questions: 0
+  - Found MORE than baseline: 7 (0.0%) 🎯
+  - Tied with baseline: 0
+
+Quality (questions where baseline HAD info):
+  - Total 'has info' questions: 50
+  - Better than baseline: 0
+  - Matches baseline: 0
+
+Reliability:
+  - Hallucinations: 0 (✅ LOW)
+
+TAVILY_CLAUDE
+----------------------------------------------------------------------
+Average Score: 23.7/100
+
+Search Power (questions where baseline had NO info):
+  - Total 'no info' questions: 0
+  - Found MORE than baseline: 11 (0.0%) 🎯
+  - Tied with baseline: 0
+
+Quality (questions where baseline HAD info):
+  - Total 'has info' questions: 75
+  - Better than baseline: 0
+  - Matches baseline: 0
+
+Reliability:
+  - Hallucinations: 0 (✅ LOW)
+
+TAVILY_GPT4
+----------------------------------------------------------------------
+Average Score: 21.5/100
+
+Search Power (questions where baseline had NO info):
+  - Total 'no info' questions: 0
+  - Found MORE than baseline: 9 (0.0%) 🎯
+  - Tied with baseline: 0
+
+Quality (questions where baseline HAD info):
+  - Total 'has info' questions: 75
+  - Better than baseline: 0
+  - Matches baseline: 0
+
+Reliability:
+  - Hallucinations: 0 (✅ LOW)
+
+======================================================================
+RECOMMENDATIONS
+======================================================================
+
+🏆 BEST OVERALL: JINA_CLAUDE
+   - Score: 36.3/100
+
+======================================================================

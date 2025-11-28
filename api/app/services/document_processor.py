@@ -8,7 +8,9 @@ from chromadb.config import Settings
 from openai import OpenAI
 import tiktoken
 from api.app.plugins.base import StandardDocument
+from api.app.core.logging import get_logger
 
+logger = get_logger("document_processor")
 
 class DocumentProcessor:
     """Processes and stores documents in ChromaDB"""
@@ -29,6 +31,7 @@ class DocumentProcessor:
         host = os.getenv("CHROMA_HOST", chroma_config.get("host", "localhost"))
         port = int(os.getenv("CHROMA_PORT", chroma_config.get("port", 8001)))
         
+        logger.info(f"Connecting to ChromaDB at {host}:{port}")
         self.chroma_client = chromadb.HttpClient(
             host=host,
             port=port
@@ -77,6 +80,7 @@ class DocumentProcessor:
         Returns:
             List of embedding vectors
         """
+        logger.debug(f"Generating embeddings for {len(texts)} chunks using {self.embedding_model}")
         response = self.openai_client.embeddings.create(
             model=self.embedding_model,
             input=texts
@@ -113,6 +117,8 @@ class DocumentProcessor:
 
             if not chunks:
                 continue
+
+            logger.info(f"Generated {len(chunks)} chunks for document: {doc.url}")
 
             # Generate embeddings
             embeddings = self.generate_embeddings(chunks)
@@ -171,6 +177,7 @@ class DocumentProcessor:
         query_embedding = self.generate_embeddings([query])[0]
 
         # Search
+        logger.info(f"Querying ChromaDB collection '{collection_name}' with query: '{query}'")
         results = collection.query(
             query_embeddings=[query_embedding],
             n_results=n_results

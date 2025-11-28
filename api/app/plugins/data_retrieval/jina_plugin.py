@@ -6,7 +6,9 @@ import httpx
 from typing import List, Dict
 from datetime import datetime
 from api.app.plugins.base import DataRetrievalPlugin, StandardDocument
+from api.app.core.logging import get_logger
 
+logger = get_logger("jina_plugin")
 
 class JinaPlugin(DataRetrievalPlugin):
     """
@@ -33,6 +35,7 @@ class JinaPlugin(DataRetrievalPlugin):
             StandardDocument with markdown content
         """
         jina_url = f"{self.base_url}/{url}"
+        logger.info(f"Fetching URL via Jina: {jina_url}")
 
         headers = {}
         if self.api_key:
@@ -44,6 +47,7 @@ class JinaPlugin(DataRetrievalPlugin):
                 response.raise_for_status()
 
                 markdown_content = response.text
+                logger.info(f"Successfully fetched content. Length: {len(markdown_content)}")
 
                 # Extract metadata from headers if available
                 metadata = {
@@ -60,6 +64,7 @@ class JinaPlugin(DataRetrievalPlugin):
                 )
 
         except httpx.HTTPError as e:
+            logger.error(f"Jina fetch error: {str(e)}")
             raise Exception(f"Failed to fetch URL with Jina: {str(e)}")
 
     def fetch_batch(self, urls: List[str]) -> List[StandardDocument]:
@@ -73,6 +78,7 @@ class JinaPlugin(DataRetrievalPlugin):
             List of StandardDocuments
         """
         documents = []
+        logger.info(f"Batch fetching {len(urls)} URLs")
 
         # Process in batches for rate limiting
         for i in range(0, len(urls), self.batch_size):
@@ -83,7 +89,7 @@ class JinaPlugin(DataRetrievalPlugin):
                     doc = self.fetch_url(url)
                     documents.append(doc)
                 except Exception as e:
-                    print(f"Error fetching {url}: {e}")
+                    logger.error(f"Error fetching {url}: {e}")
                     continue
 
         return documents

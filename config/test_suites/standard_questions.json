@@ -1,0 +1,152 @@
+[
+  {
+    "id": "q1",
+    "question": "What core services does BizGenie provide to businesses?",
+    "category": "core_value",
+    "difficulty": "easy"
+  },
+  {
+    "id": "q2",
+    "question": "How does BizGenie differentiate itself from other AI automation tools?",
+    "category": "differentiation",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q3",
+    "question": "What is the primary mission or goal of BizGenie?",
+    "category": "company_mission",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q4",
+    "question": "How does BizGenie help businesses improve efficiency or customer engagement?",
+    "category": "benefits",
+    "difficulty": "easy"
+  },
+  {
+    "id": "q5",
+    "question": "Does BizGenie offer features for managing appointments or bookings?",
+    "category": "feature_specific",
+    "difficulty": "easy"
+  },
+  {
+    "id": "q6",
+    "question": "How does BizGenie describe the quality or style of its AI voices?",
+    "category": "usp_voice",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q7",
+    "question": "Can BizGenie agents be customized to match a specific brand voice or script?",
+    "category": "customization",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q8",
+    "question": "Does BizGenie handle inbound calls, outbound calls, or both?",
+    "category": "call_handling",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q9",
+    "question": "Is there a feature for sending SMS or text follow-ups?",
+    "category": "feature_specific",
+    "difficulty": "hard"
+  },
+  {
+    "id": "q10",
+    "question": "Does BizGenie provide reporting or analytics on call handling and customer interactions?",
+    "category": "reporting",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q11",
+    "question": "Can BizGenie handle multiple calls simultaneously?",
+    "category": "scalability",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q12",
+    "question": "What third-party systems or platforms does BizGenie integrate with?",
+    "category": "integrations_general",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q13",
+    "question": "Does BizGenie integrate with GoHighLevel (GHL)?",
+    "category": "integrations_specific",
+    "difficulty": "easy"
+  },
+  {
+    "id": "q14",
+    "question": "Is there an API available for developers to connect with BizGenie?",
+    "category": "api_developer",
+    "difficulty": "hard"
+  },
+  {
+    "id": "q15",
+    "question": "How does BizGenie ensure data security and privacy?",
+    "category": "security_privacy",
+    "difficulty": "hard"
+  },
+  {
+    "id": "q16",
+    "question": "What kind of businesses or industries is BizGenie designed for?",
+    "category": "target_audience",
+    "difficulty": "easy"
+  },
+  {
+    "id": "q17",
+    "question": "Can dental or medical offices use BizGenie for scheduling?",
+    "category": "use_case_specific",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q18",
+    "question": "Is BizGenie suitable for real estate agents or agencies?",
+    "category": "use_case_specific",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q19",
+    "question": "What are the initial steps for a new business to begin using BizGenie?",
+    "category": "onboarding_process",
+    "difficulty": "easy"
+  },
+  {
+    "id": "q20",
+    "question": "What kind of support is available if I encounter issues with BizGenie?",
+    "category": "customer_support",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q21",
+    "question": "Is there a free trial or demo available for new users?",
+    "category": "pricing_sales",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q22",
+    "question": "What are the pricing plans or cost structure for BizGenie?",
+    "category": "pricing_sales",
+    "difficulty": "hard"
+  },
+  {
+    "id": "q23",
+    "question": "Are there any setup fees associated with BizGenie?",
+    "category": "pricing_sales",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q24",
+    "question": "Does BizGenie offer a mobile app for managing the AI?",
+    "category": "feature_specific",
+    "difficulty": "hard"
+  },
+  {
+    "id": "q25",
+    "question": "Can BizGenie translate calls into different languages in real-time?",
+    "category": "feature_specific",
+    "difficulty": "hard"
+  }
+]

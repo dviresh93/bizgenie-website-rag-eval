@@ -1,56 +1,52 @@
-# Active configuration (can be changed via API)
-active_config: "jina_claude"
+# Available MCP Tools
+mcp_tools:
+  tavily:
+    name: "Tavily AI Search"
+    class: "TavilyTool"
+    module: "api.app.tools.tavily_tool"
+    api_key_env: "TAVILY_API_KEY"
+    config:
+      search_depth: "advanced"
+      max_results: 5
+      include_domains: []  # Optional: focus on specific domain
 
-# Available configurations
-configurations:
-  jina_claude:
-    name: "Jina + Claude 3.5 Sonnet"
-    description: "Free data retrieval with Claude LLM"
-    data_retrieval:
-      plugin: "jina"
-      api_key: ${JINA_API_KEY}
-      options:
-        use_parallel: true
-        batch_size: 10
-    llm:
-      plugin: "claude"
-      api_key: ${ANTHROPIC_API_KEY}
-      options:
-        model: "claude-3-opus-20240229"
-        temperature: 0.7
-        max_tokens: 1000
+  jina:
+    name: "Jina AI Reader"
+    class: "JinaTool"
+    module: "api.app.tools.jina_tool"
+    api_key_env: "JINA_API_KEY"
+    config:
+      mode: "search"
 
-  jina_gpt4:
-    name: "Jina + GPT-4"
-    description: "Free data retrieval with premium LLM"
-    data_retrieval:
-      plugin: "jina"
-      api_key: ${JINA_API_KEY}
-      options:
-        use_parallel: true
-        batch_size: 10
-    llm:
-      plugin: "gpt4"
-      api_key: ${OPENAI_API_KEY}
-      options:
-        model: "gpt-4-turbo-preview"
-        temperature: 0.7
-        max_tokens: 1000
+# Available LLMs
+llm_models:
+  claude:
+    name: "Claude 3 Opus"
+    class: "ClaudeLLM"
+    module: "api.app.llm.claude_llm"
+    api_key_env: "ANTHROPIC_API_KEY"
+    config:
+      model: "claude-3-opus-20240229"
+      temperature: 0.7
+      max_tokens: 1000
 
-# Processing settings (stable across all configs)
-processing:
-  chunking:
-    strategy: "markdown"
-    chunk_size: 500
-    chunk_overlap: 50
+  gpt4:
+    name: "GPT-4 Turbo"
+    class: "GPT4LLM"
+    module: "api.app.llm.gpt4_llm"
+    api_key_env: "OPENAI_API_KEY"
+    config:
+      model: "gpt-4-turbo-preview"
+      temperature: 0.7
+      max_tokens: 2048
 
-  embedding:
-    provider: "openai"
-    model: "text-embedding-3-small"
-    api_key: ${OPENAI_API_KEY}
+# AI Judge configuration
+ai_judge:
+  model: "claude-3-opus-20240229"
+  api_key_env: "ANTHROPIC_API_KEY"
 
-  storage:
-    type: "chromadb"
-    host: "localhost"
-    port: 8001
-    persist_directory: "/app/data/chromadb"
+# Test configuration
+testing:
+  questions_file: "config/test_suites/standard_questions.json"
+  baseline_file: "test_results/ground_truth/notebookllm_baseline.json"
+  results_dir: "test_results"

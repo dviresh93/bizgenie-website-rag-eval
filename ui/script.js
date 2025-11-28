@@ -1,33 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_BASE_URL = '/api/v1';
 
-    // Elements
-    const indexSection = document.getElementById('indexing-section');
-    const indexForm = document.getElementById('indexForm');
-    const urlInput = document.getElementById('urlInput');
-    const indexBtn = document.getElementById('indexBtn');
-    const indexStatus = document.getElementById('indexStatus');
+    // Elements - Setup
+    const setupSection = document.getElementById('setup-section');
+    const setupForm = document.getElementById('setupForm');
+    const retrievalSelect = document.getElementById('retrievalSelect');
+    const llmSelect = document.getElementById('llmSelect');
+    const targetUrlInput = document.getElementById('targetUrl');
+    const startSessionBtn = document.getElementById('startSessionBtn');
 
-    const querySection = document.getElementById('query-section');
+    // Elements - Chat
+    const chatSection = document.getElementById('chat-section');
+    const activeUrlSpan = document.getElementById('activeUrl');
+    const activeConfigSpan = document.getElementById('activeConfig');
     const queryForm = document.getElementById('queryForm');
     const questionInput = document.getElementById('questionInput');
     const queryBtn = document.getElementById('queryBtn');
-    const queryResponseDiv = document.getElementById('queryResponse');
+    const statusIndicator = document.getElementById('statusIndicator');
+    const chatContainer = document.getElementById('queryResponse'); // Reusing this container for history
+    const newSessionBtn = document.getElementById('newSessionBtn');
 
-    // Helper: Set Status
-    function setStatus(element, message, type) {
-        element.className = `status-bar ${type}`;
-        element.innerHTML = message;
+    // State
+    let sessionState = {
+        mcpTool: '',
+        llmModel: '',
+        targetUrl: '',
+        sessionId: ''
+    };
+
+    let availableComponents = {};
+
+    // --- Helpers ---
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
 
-    // Helper: API Fetch
     async function fetchApi(endpoint, method = 'GET', body = null) {
-        const options = {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-        };
+        const options = { method, headers: { 'Content-Type': 'application/json' } };
         if (body) options.body = JSON.stringify(body);
-
         const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
         if (!response.ok) {
             const errorData = await response.json();
@@ -36,81 +49,161 @@ document.addEventListener('DOMContentLoaded', () => {
         return await response.json();
     }
 
-    // --- Indexing Logic ---
-    indexForm.addEventListener('submit', async (e) => {
+    function setStatus(message, type) {
+        if (!message) {
+            statusIndicator.style.display = 'none';
+            return;
+        }
+        statusIndicator.className = `status-bar ${type}`;
+        statusIndicator.innerHTML = message;
+        statusIndicator.style.display = 'block';
+    }
+
+    function appendMessage(role, content, meta = null) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${role}`;
+        msgDiv.style.marginBottom = '20px';
+        msgDiv.style.padding = '20px';
+        msgDiv.style.borderRadius = '12px';
+        msgDiv.style.backgroundColor = role === 'user' ? '#e3f2fd' : '#f8f9fa';
+        msgDiv.style.borderLeft = role === 'user' ? '5px solid #3498db' : '5px solid #34495e';
+
+        let html = `<div style="margin-bottom: 10px;"><strong>${role === 'user' ? 'You' : 'AI Expert'}</strong></div>`;
+        html += `<div style="line-height: 1.6;">${content}</div>`;
+
+        if (meta) {
+            // Format Sources
+            const sourcesList = meta.sources.map(s => `<li><a href="${s}" target="_blank">${s}</a></li>`).join('');
+            html += `
+                <div class="meta-info">
+                    <details>
+                        <summary style="cursor: pointer; font-weight: 600;">Reference Sources (${meta.sources.length})</summary>
+                        <ul style="margin-top: 10px; padding-left: 20px; word-break: break-all;">${sourcesList}</ul>
+                    </details>
+                    <p style="margin-top: 10px; font-size: 0.85em; color: #95a5a6;">Processing Time: ${(meta.metrics.total_time).toFixed(2)}s</p>
+                </div>
+            `;
+        }
+
+        msgDiv.innerHTML = html;
+        chatContainer.appendChild(msgDiv);
+        chatContainer.classList.add('visible'); // Ensure container is visible
+        
+        // Scroll to bottom
+        // window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    // --- Init ---
+    async function loadComponents() {
+        try {
+            const data = await fetchApi('/components');
+            availableComponents = data;
+
+            // Populate Retrieval Select
+            retrievalSelect.innerHTML = '';
+            data.mcp_tools.forEach(tool => {
+                const option = document.createElement('option');
+                option.value = tool.id;
+                option.textContent = tool.name;
+                if (tool.id === 'tavily') option.selected = true;
+                retrievalSelect.appendChild(option);
+            });
+
+            // Populate LLM Select
+            llmSelect.innerHTML = '';
+            data.llm_models.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model.id;
+                option.textContent = model.name;
+                if (model.id === 'claude') option.selected = true;
+                llmSelect.appendChild(option);
+            });
+
+        } catch (e) {
+            console.error("Error loading components:", e);
+            retrievalSelect.innerHTML = '<option>Error loading options</option>';
+        }
+    }
+
+    // --- Event Handlers ---
+
+    // 1. Start Session
+    setupForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const url = urlInput.value.trim();
+        
+        const url = targetUrlInput.value.trim();
         if (!url) return;
 
-        // UI State: Loading
-        indexBtn.disabled = true;
-        indexBtn.textContent = 'Indexing...';
-        setStatus(indexStatus, '⏳ Fetching and processing content. This may take a moment...', 'loading');
-        
-        // Disable query section while indexing new content
-        querySection.classList.add('disabled');
-        questionInput.disabled = true;
-        queryBtn.disabled = true;
-        questionInput.placeholder = "Indexing in progress...";
-        queryResponseDiv.classList.remove('visible');
+        // Save State
+        sessionState.mcpTool = retrievalSelect.value;
+        sessionState.llmModel = llmSelect.value;
+        sessionState.targetUrl = url;
+        sessionState.sessionId = generateUUID(); // New Session ID
 
+        // Update UI
         try {
-            const data = await fetchApi('/index', 'POST', { url });
-            
-            // UI State: Success
-            setStatus(indexStatus, `✅ Success! Indexed ${data.documents_processed} page(s) into collection '${data.collection_name}'.`, 'success');
-            
-            // Enable Query Section
-            querySection.classList.remove('disabled');
-            questionInput.disabled = false;
-            queryBtn.disabled = false;
-            questionInput.placeholder = "Ask a question about the website...";
-            questionInput.focus();
-
-        } catch (error) {
-            // UI State: Error
-            setStatus(indexStatus, `❌ Indexing failed: ${error.message}`, 'error');
-        } finally {
-            indexBtn.disabled = false;
-            indexBtn.textContent = 'Index';
+            activeUrlSpan.textContent = new URL(url).hostname;
+        } catch {
+            activeUrlSpan.textContent = url;
         }
+        activeConfigSpan.textContent = `${availableComponents.mcp_tools.find(t => t.id === sessionState.mcpTool).name} + ${availableComponents.llm_models.find(m => m.id === sessionState.llmModel).name}`;
+        
+        setupSection.classList.add('hidden');
+        chatSection.classList.remove('hidden');
+        
+        // Clear previous chat if any (though reload handles this, pure JS state might not)
+        chatContainer.innerHTML = ''; 
+        
+        questionInput.focus();
     });
 
-    // --- Query Logic ---
+    // 2. Ask Question
     queryForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const question = questionInput.value.trim();
         if (!question) return;
 
+        // Add User Message to UI immediately
+        appendMessage('user', question);
+        questionInput.value = ''; // Clear input
+
         // UI State: Loading
         queryBtn.disabled = true;
-        queryBtn.textContent = 'Thinking...';
-        queryResponseDiv.classList.add('visible');
-        queryResponseDiv.innerHTML = '<p>🤔 Analyzing content and generating answer...</p>';
+        queryBtn.textContent = 'Analyzing...';
+        questionInput.disabled = true;
+        setStatus('🤔 Investigating website and generating expert answer...', 'loading');
 
         try {
-            const data = await fetchApi('/query', 'POST', { question });
+            const data = await fetchApi('/query', 'POST', { 
+                question: question,
+                mcp_tool: sessionState.mcpTool,
+                llm_model: sessionState.llmModel,
+                target_url: sessionState.targetUrl,
+                session_id: sessionState.sessionId
+            });
             
-            // Format Sources
-            const sourcesList = data.sources.map(s => `<li>${s}</li>`).join('');
-            
-            // Render Answer
-            queryResponseDiv.innerHTML = `
-                <div style="font-size: 1.1em; line-height: 1.6;">${data.answer}</div>
-                <div class="meta-info">
-                    <p><strong>Model:</strong> ${data.model_used} | <strong>Confidence:</strong> ${(data.confidence * 100).toFixed(0)}%</p>
-                    <details>
-                        <summary style="cursor: pointer;">View Sources</summary>
-                        <ul style="margin-top: 5px; padding-left: 20px;">${sourcesList}</ul>
-                    </details>
-                </div>
-            `;
+            setStatus('', ''); // Clear status
+
+            // Add AI Message to UI
+            appendMessage('assistant', data.answer, { sources: data.sources, metrics: data.metrics });
 
         } catch (error) {
-            queryResponseDiv.innerHTML = `<p style="color: #c0392b;"><strong>Error:</strong> ${error.message}</p>`;
+            setStatus(`❌ Error: ${error.message}`, 'error');
         } finally {
             queryBtn.disabled = false;
-            queryBtn.textContent = 'Ask';
+            queryBtn.textContent = 'Ask Question';
+            questionInput.disabled = false;
+            questionInput.focus();
         }
     });
+
+    // 3. New Session
+    newSessionBtn.addEventListener('click', () => {
+        if (confirm("Start a new session? Current conversation history will be cleared.")) {
+            window.location.reload();
+        }
+    });
+
+    // Start
+    loadComponents();
 });
