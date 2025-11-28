@@ -1,17 +1,20 @@
 #!/bin/bash
 
-# Benchmark Suite Runner (Parallelized)
-# Runs all key combinations of MCP Tools and LLMs in parallel.
+# Benchmark Suite Runner (Internal)
+# This script is designed to run INSIDE the docker container.
 
 echo "========================================================"
-echo "🚀 STARTING FULL RAG BENCHMARK SUITE (PARALLEL MODE)"
+echo "🚀 STARTING FULL RAG BENCHMARK SUITE (INTERNAL)"
 echo "========================================================"
-echo "Running all 4 combinations in parallel..."
-echo "This will take approximately 3-5 minutes."
+echo "Working directory: $(pwd)"
+
+# Create logs directory
+# Ensure we are in workspace or absolute path
+LOG_DIR="/workspace/test_results/logs"
+mkdir -p "$LOG_DIR"
+
+echo "Logs will be saved to $LOG_DIR"
 echo ""
-
-# Create temporary directory for logs
-mkdir -p test_results/logs
 
 # Define combinations to test
 declare -a combinations=(
@@ -23,55 +26,77 @@ declare -a combinations=(
 
 # Start all combinations in parallel
 pids=()
+log_files=()
+
 for combo in "${combinations[@]}"; do
     set -- $combo
     MCP=$1
     LLM=$2
+    LOG_FILE="$LOG_DIR/${MCP}_${LLM}.log"
+    
+    # Clear old log
+    > "$LOG_FILE"
 
-    echo "🧪 Starting: $MCP + $LLM (background)"
+    echo "🧪 Starting: $MCP + $LLM"
 
-    # Run in background and save PID
-    python3 scripts/run_evaluation.py --mcp $MCP --llm $LLM \
-        > test_results/logs/${MCP}_${LLM}.log 2>&1 &
+    # Run python directly (we are already inside container)
+    python3 scripts/run_evaluation.py --mcp $MCP --llm $LLM > "$LOG_FILE" 2>&1 &
 
     pids+=($!)
+    log_files+=("$LOG_FILE")
 done
 
 echo ""
-echo "All 4 evaluations running in parallel..."
-echo "PIDs: ${pids[@]}"
-echo ""
+echo "All 4 evaluations running. Monitoring progress..."
+echo "------------------------------------------------"
 
-# Wait for all processes and track results
-failed=0
-for i in "${!pids[@]}"; do
-    set -- ${combinations[$i]}
-    MCP=$1
-    LLM=$2
+# Monitor loop
+while true; do
+    running_count=0
+    output_lines=""
+    
+    for i in "${!pids[@]}"; do
+        pid=${pids[$i]}
+        combo=${combinations[$i]}
+        logfile=${log_files[$i]}
+        
+        # Check if process is still running
+        if kill -0 $pid 2>/dev/null; then
+            running_count=$((running_count + 1))
+            # Get last line of log (tail might fail if file empty)
+            if [ -f "$logfile" ]; then
+                last_line=$(tail -n 1 "$logfile" 2>/dev/null | cut -c1-80) 
+            else
+                last_line="Initializing..."
+            fi
+            output_lines+="${combo}: ${last_line}...
+"
+        else
+            output_lines+="${combo}: ✅ Completed (or Failed - check log)\n"
+        fi
+    done
 
-    echo "⏳ Waiting for $MCP + $LLM (PID: ${pids[$i]})..."
-
-    if wait ${pids[$i]}; then
-        echo "✅ Finished: $MCP + $LLM"
-    else
-        echo "❌ Failed: $MCP + $LLM (check test_results/logs/${MCP}_${LLM}.log)"
-        failed=$((failed + 1))
+    # Clear screen section (simple implementation)
+    printf "\033[5A"
+    printf "$output_lines"
+    
+    if [ $running_count -eq 0 ]; then
+        break
     fi
+    
+    sleep 2
 done
 
 echo ""
+echo "------------------------------------------------"
+echo "All processes finished."
+echo ""
+
 echo "========================================================"
 echo "📊 GENERATING FINAL COMPARISON REPORT"
 echo "========================================================"
-
-if [ $failed -gt 0 ]; then
-    echo "⚠️  Warning: $failed combination(s) failed"
-    echo "   Check log files in test_results/logs/"
-    echo ""
-fi
 
 python3 scripts/generate_comparison_report.py
 
 echo ""
 echo "✅ Done! Review the report above."
-echo "   Logs saved to: test_results/logs/"

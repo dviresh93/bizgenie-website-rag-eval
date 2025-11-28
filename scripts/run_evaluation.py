@@ -25,9 +25,11 @@ def main():
     parser.add_argument("--questions", default="config/test_suites/standard_questions.json")
     args = parser.parse_args()
 
-    # Path adjustments
-    base_path = "website-rag" if os.path.exists("website-rag") else "."
-    questions_path = os.path.join(base_path, args.questions)
+    # Path adjustments - Absolute paths relative to script location
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir) # /workspace/ or /home/.../website-rag/ 
+    
+    questions_path = os.path.join(project_root, args.questions)
     
     # Initialize Tool
     print(f"Initializing {args.mcp}...")
@@ -56,39 +58,35 @@ def main():
 
     # Load Questions
     try:
-        questions = load_json(questions_path)
+        with open(questions_path, 'r') as f:
+            questions = json.load(f)
     except Exception as e:
         print(f"Error loading questions: {e}")
+        print(f"Questions Path: {questions_path}")
         return
 
-    system_results = []
+    results = []
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     
-    print(f"\n🚀 Starting evaluation run: {args.mcp} + {args.llm}")
-    print("="*60)
+    print(f"\nStarting evaluation: {args.mcp} + {args.llm}")
+    print("="*50)
 
     target_url = "https://bizgenieai.com/"
 
-    # --- PHASE 1: EXECUTION ---
-    for i, q in enumerate(questions, 1):
+    for q in questions:
         qid = q["id"]
         question_text = q["question"]
         
-        print(f"\n[{i}/{len(questions)}] Processing {qid}: {question_text}")
+        print(f"Processing {qid}: {question_text}")
 
         # 1. Search
-        start_search = time.time()
         try:
             search_res = mcp_tool.search(question_text, context=target_url)
-            search_time = time.time() - start_search
-            print(f"   ✓ Search found {len(search_res.sources)} sources ({search_time:.2f}s)")
         except Exception as e:
-            print(f"   ❌ Search failed: {e}")
+            print(f"  Search failed: {e}")
             continue
 
         # 2. Generate
-        start_gen = time.time()
-        
         system_prompt = (
             f"You are an expert customer support representative for {target_url}. "
             "Your goal is to provide accurate, helpful answers primarily based on the information "
@@ -99,11 +97,20 @@ def main():
 
         try:
             llm_res = llm.generate(history, search_res.content, system_prompt=system_prompt)
-            gen_time = time.time() - start_gen
-            print(f"   ✓ Answer generated ({gen_time:.2f}s)")
         except Exception as e:
-            print(f"   ❌ Generation failed: {e}")
+            print(f"  Generation failed: {e}")
             continue
+
+        # 3. Evaluate (Absolute Quality)
+        print("  Evaluating with AI Judge...")
+        
+        # We evaluate the system answer directly. 
+        # Since we removed baseline, we pass just the system answer and sources.
+        scores = judge.evaluate_answer(
+            question=question_text,
+            system_answer=llm_res.answer,
+            system_sources=search_res.sources
+        )
 
         # Store result
         result_entry = {
@@ -112,39 +119,67 @@ def main():
             "answer": llm_res.answer,
             "sources": search_res.sources,
             "metrics": {
-                "search_time": search_time,
-                "gen_time": gen_time,
-                "total_time": search_time + gen_time,
-                "tokens": llm_res.tokens_used
-            }
+                "search_time": search_res.search_time,
+                "gen_time": llm_res.generation_time,
+                "total_time": search_res.search_time + llm_res.generation_time,
+                "tokens": llm_res.tokens_used,
+                "search_cost": getattr(search_res, 'search_cost', 0.0),
+                "gen_cost": getattr(llm_res, 'generation_cost', 0.0)
+            },
+            "scores": scores
         }
-        system_results.append(result_entry)
+        results.append(result_entry)
+        print(f"  Score: {scores.get('overall_quality', 0):.1f}/100")
 
-    # Save System Results
-    output_dir = os.path.join(base_path, "test_results", f"{args.mcp}_{args.llm}")
+    # Save Results
+    output_dir = os.path.join(project_root, "test_results", f"{args.mcp}_{args.llm}")
     os.makedirs(output_dir, exist_ok=True)
+    
+    # Save results.json (raw data)
     results_file = os.path.join(output_dir, f"results_{timestamp}.json")
+    with open(results_file, 'w') as f:
+        json.dump(results, f, indent=2)
+
+    # Save eval.json (scores) - mimicking the structure expected by generate_report
+    # Ideally we'd just save one file, but generate_report expects 'eval_*.json'
+    # with specific structure. Let's save 'eval_*.json' containing the scored results.
     eval_file = os.path.join(output_dir, f"eval_{timestamp}.json")
     
-    with open(results_file, 'w') as f:
-        json.dump(system_results, f, indent=2)
-
-    print("\n" + "="*60)
-    print(f"✅ Execution complete. Results saved to {results_file}")
-    print("="*60)
-
-    # --- PHASE 2: EVALUATION ---
-    print(f"\n⚖️  Starting AI Judge Evaluation...")
+    # Adapt results to eval structure if needed, but 'results' list already contains 'scores'
+    # generated by AIJudge. So we can just save 'results' as the eval file too, 
+    # or better, save a simplified list of evaluations.
+    # AIJudge.evaluate_batch used to return a list of evaluation dicts.
+    # Here 'scores' IS the evaluation dict for one question.
+    # Let's extract the evaluation dicts and save them.
     
-    try:
-        judge.evaluate_batch(
-            results_file=results_file,
-            output_file=eval_file
-        )
-    except Exception as e:
-        print(f"\n❌ Evaluation failed: {e}")
-        import traceback
-        traceback.print_exc()
+    evaluations = []
+    for r in results:
+        ev = r["scores"]
+        # Add metadata expected by report generator
+        ev["question_id"] = r["question_id"]
+        ev["question"] = r["question"]
+        # Add verdict logic if not present in scores
+        if "verdict" not in ev:
+            score = ev.get("overall_quality", 0)
+            if ev.get("hallucination"):
+                ev["verdict"] = "HALLUCINATION"
+            elif score >= 80:
+                ev["verdict"] = "EXCELLENT"
+            elif score >= 60:
+                ev["verdict"] = "GOOD"
+            elif score >= 40:
+                ev["verdict"] = "FAIR"
+            else:
+                ev["verdict"] = "POOR"
+        evaluations.append(ev)
+
+    with open(eval_file, 'w') as f:
+        json.dump(evaluations, f, indent=2)
+
+    print("="*50)
+    print(f"Execution & Evaluation complete.")
+    print(f"Results: {results_file}")
+    print(f"Evaluations: {eval_file}")
 
 if __name__ == "__main__":
     main()
