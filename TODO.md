@@ -79,37 +79,115 @@ Evaluate which **MCP Tool + LLM combination** performs best for answering questi
 **What to do**:
 - Remove all baseline comparison logic
 - Remove "found more" and "has_info" calculations
-- Focus on **4 simple metrics**: Quality, Cost, Speed, Hallucinations
+- Show **comprehensive metrics** (we have the data, let's use it!)
 - Report structure:
 ```markdown
 # MCP Tool + LLM Comparison Report
 
 ## 🏆 Overall Rankings
-| Rank | Combination    | Quality | Cost/Query | Speed  | Halluc. |
-|------|----------------|---------|------------|--------|---------|
-| 1    | jina_claude    | 85.2    | $0.024     | 3.2s   | 0       |
-| 2    | tavily_claude  | 82.1    | $0.031     | 2.8s   | 1       |
-...
+| Rank | Combination    | Quality | Total Cost | Total Time | Search Time | Gen Time | Halluc. |
+|------|----------------|---------|------------|------------|-------------|----------|---------|
+| 1    | jina_claude    | 85.2    | $0.024     | 3.2s       | 1.1s        | 2.1s     | 0       |
+| 2    | tavily_claude  | 82.1    | $0.031     | 2.8s       | 0.9s        | 1.9s     | 1       |
+| 3    | jina_gpt4      | 84.5    | $0.035     | 2.9s       | 1.1s        | 1.8s     | 0       |
+| 4    | tavily_gpt4    | 81.0    | $0.042     | 2.5s       | 0.9s        | 1.6s     | 2       |
 
 ## 📊 Detailed Metrics
 
 ### JINA_CLAUDE
-- Average Quality: 85.2/100
-- Average Cost: $0.024/query
-- Average Speed: 3.2s/query
-- Hallucinations: 0/25 questions
+**Quality Breakdown:**
+- Average Overall Quality: 85.2/100
+- Average Accuracy: 88/100
+- Average Completeness: 84/100
+- Average Clarity: 92/100
+- Average Helpfulness: 87/100
 
-Top scoring questions: q1 (95), q3 (92), q4 (90)
-Low scoring questions: q15 (45), q18 (52)
+**Performance:**
+- Avg Search Latency: 1.1s (Jina MCP tool)
+- Avg Generation Latency: 2.1s (Claude LLM)
+- Avg Total Latency: 3.2s
+- Fastest query: 2.1s (q5)
+- Slowest query: 5.8s (q22)
+
+**Cost:**
+- Avg Search Cost: $0.002/query (Jina API)
+- Avg Generation Cost: $0.022/query (Claude API)
+- Avg Total Cost: $0.024/query
+- Total for 25 queries: $0.60
+- Most expensive query: $0.045 (q12, 2500 tokens)
+
+**Reliability:**
+- Hallucinations: 0/25 questions (✅ EXCELLENT)
+- Failed queries: 0/25
+- Avg tokens used: 1450/query
+- Avg answer length: 320 characters
+
+**Quality Distribution:**
+- Excellent (80-100): 18 questions
+- Good (60-79): 5 questions
+- Fair (40-59): 2 questions
+- Poor (0-39): 0 questions
+
+**Top scoring questions:** q1 (95), q3 (92), q4 (90)
+**Low scoring questions:** q15 (45), q18 (52)
 
 ### TAVILY_CLAUDE
-...
+[Same detailed breakdown]
 
-## ✅ Recommendation
-**Best Overall**: JINA_CLAUDE
+## 📈 Comparative Analysis
+
+### Quality Comparison
+- Highest quality: JINA_CLAUDE (85.2)
+- Most accurate: JINA_CLAUDE (88.0 accuracy)
+- Most complete: JINA_GPT4 (86.0 completeness)
+- Clearest answers: JINA_CLAUDE (92.0 clarity)
+
+### Speed Comparison
+- Fastest search: TAVILY (0.9s avg)
+- Fastest generation: GPT4 (1.7s avg)
+- Fastest total: TAVILY_GPT4 (2.5s)
+- Speed/Quality champion: JINA_CLAUDE (85.2 quality, 3.2s)
+
+### Cost Comparison
+- Cheapest search: JINA ($0.002/query)
+- Cheapest generation: CLAUDE ($0.022/query)
+- Cheapest total: JINA_CLAUDE ($0.024/query)
+- Most expensive: TAVILY_GPT4 ($0.042/query)
+
+### Reliability Comparison
+- Zero hallucinations: JINA_CLAUDE, JINA_GPT4
+- Fewest hallucinations: JINA_CLAUDE, JINA_GPT4 (0)
+- Most hallucinations: TAVILY_GPT4 (2)
+
+## 🎯 Recommendations
+
+**🏆 BEST OVERALL: JINA_CLAUDE**
 - Highest quality (85.2/100)
 - Zero hallucinations
-- Acceptable cost ($0.024/query)
+- Lowest cost ($0.024/query)
+- Acceptable speed (3.2s)
+- **Use when: Quality and reliability matter most**
+
+**⚡ BEST FOR SPEED: TAVILY_GPT4**
+- Fastest total time (2.5s)
+- Good quality (81.0/100)
+- **Use when: Speed is critical, slight quality trade-off acceptable**
+
+**💰 BEST VALUE: JINA_CLAUDE**
+- Lowest cost per query ($0.024)
+- Highest quality (85.2)
+- **Use when: Budget-conscious but need high quality**
+
+**🔍 BEST SEARCH TOOL: TAVILY**
+- Faster search (0.9s vs 1.1s)
+- More expensive ($0.012 vs $0.002 search cost)
+- **Use when: Real-time freshness matters**
+
+**🤖 BEST LLM: CLAUDE**
+- Higher quality scores
+- Zero hallucinations
+- Slightly slower than GPT4
+- **Use when: Accuracy and reliability critical**
 ```
 
 #### 4. Update Documentation
@@ -158,16 +236,42 @@ python scripts/generate_comparison_report.py
 ```
 
 ### Metrics Measured
-1. **Quality Score** (0-100): AI judge rates accuracy, completeness, clarity, helpfulness
-2. **Cost** ($/query): Search cost + LLM generation cost
-3. **Speed** (seconds): Search time + generation time
-4. **Hallucination Rate**: Questions where AI made unsupported claims
+
+**Quality Metrics:**
+1. **Overall Quality Score** (0-100): Weighted average of accuracy, completeness, clarity, helpfulness
+2. **Accuracy** (0-100): Factual correctness
+3. **Completeness** (0-100): How thoroughly question is answered
+4. **Clarity** (0-100): Readability and structure
+5. **Helpfulness** (0-100): Usefulness to end user
+6. **Hallucination Rate**: Count of questions where AI made unsupported claims
+
+**Performance Metrics:**
+7. **Search Latency** (seconds): Time for MCP tool to fetch data
+8. **Generation Latency** (seconds): Time for LLM to generate answer
+9. **Total Latency** (seconds): Search + generation time
+10. **Fastest/Slowest Query**: Latency range across questions
+
+**Cost Metrics:**
+11. **Search Cost** ($/query): MCP tool API cost per query
+12. **Generation Cost** ($/query): LLM API cost per query
+13. **Total Cost** ($/query): Combined cost per query
+14. **Total Cost for 25 queries**: Full test suite cost
+15. **Most/Least Expensive Query**: Cost range
+
+**Reliability Metrics:**
+16. **Failed Queries**: Count of errors/timeouts
+17. **Token Usage**: Average tokens per query
+18. **Answer Length**: Average character count
+19. **Quality Distribution**: Breakdown by score ranges (excellent/good/fair/poor)
 
 ### Success Criteria
 - Quality score > 80/100 (excellent)
-- Zero or minimal hallucinations
+- Accuracy > 85/100 (trustworthy)
+- Zero or minimal hallucinations (< 2/25)
 - Cost < $0.05/query (acceptable for business use)
-- Speed < 5s/query (acceptable UX)
+- Total latency < 5s/query (acceptable UX)
+- Search latency < 2s (responsive search)
+- Generation latency < 3s (responsive LLM)
 
 ---
 

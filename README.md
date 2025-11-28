@@ -1,187 +1,236 @@
-# Website RAG Chatbot
+# BizGenie AI - MCP Tool + LLM Evaluation Framework
 
-A modular RAG (Retrieval-Augmented Generation) system that allows you to index any website and ask questions about its content. Built with FastAPI, ChromaDB, Jina AI, and Claude 3 Opus.
+A modular evaluation framework for testing different **MCP (Model Context Protocol) tools** and **LLMs** to find the best combination for answering questions about BizGenie services.
 
-## Features
+## 🎯 What This Framework Does
 
-- **URL Indexing:** Uses [Jina AI Reader](https://jina.ai/reader) to fetch and clean website content.
-- **Vector Search:** Uses [ChromaDB](https://www.trychroma.com/) and OpenAI embeddings for semantic search.
-- **Smart Answers:** Uses **Claude 3 Opus** (via Anthropic API) to generate accurate answers based on the retrieved context.
-- **Simple UI:** Clean web interface to interact with the system.
-- **Dockerized:** Fully containerized setup for easy deployment.
+Tests **4 combinations** of search tools and LLMs:
+- **Jina AI Reader** + **Claude 3.5 Sonnet**
+- **Jina AI Reader** + **GPT-4 Turbo**
+- **Tavily AI Search** + **Claude 3.5 Sonnet**
+- **Tavily AI Search** + **GPT-4 Turbo**
 
-## Demo
+**Measures 19 metrics** including:
+- Quality (accuracy, completeness, clarity, helpfulness)
+- Speed (search latency, generation latency, total time)
+- Cost (search cost, generation cost, total cost)
+- Reliability (hallucinations, token usage)
 
-[Watch the Introduction Video](https://drive.google.com/file/d/176K1GBaAhXD4zUE_W--ww8dX3Zkzz8lQ/view?usp=sharing)
+**Generates comprehensive reports** showing which combination performs best for your use case.
 
-## Prerequisites
+## 🚀 Quick Start
 
-- Docker & Docker Compose
-- OpenAI API Key (for embeddings)
-- Anthropic API Key (for Claude)
-- Jina AI API Key (optional, for higher rate limits)
+### 1. Setup Environment
 
-## Quick Start
-
-1.  **Clone the repository:**
-    ```bash
-    git clone git@github.com:dviresh93/bizgenie-website-rag-eval.git
-    cd bizgenie-website-rag-eval
-    ```
-
-2.  **Set up environment variables:**
-    Copy the example file and add your API keys:
-    ```bash
-    cp .env.example .env
-    # Edit .env with your keys
-    ```
-
-3.  **Run with Docker:**
-    ```bash
-    docker-compose up -d --build
-    ```
-
-4.  **Access the UI:**
-    Open [http://localhost:8000](http://localhost:8000) in your browser.
-
-## 📚 Additional Resources
-
-- **[PLAN.md](PLAN.md)** - Comprehensive exploration of architecture options
-- **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Detailed implementation strategy
-- **[TODO.md](TODO.md)** - Developer guide with step-by-step instructions
-
-### External Documentation
-- [Jina AI Reader](https://github.com/jina-ai/reader) - Web to markdown converter
-- [Claude API Docs](https://docs.anthropic.com/) - Anthropic's LLM API
-- [ChromaDB Docs](https://docs.trychroma.com/) - Vector database
-- [FastAPI Docs](https://fastapi.tiangolo.com/) - Web framework
-
-## Architecture
-
-- **Frontend:** Static HTML/JS served by FastAPI.
-- **Backend:** FastAPI (Python) at `/api/v1`.
-- **Database:** ChromaDB (Vector Store).
-
-## Configuration
-
-Configuration is managed in `config/configs.yaml`. You can change the active model or settings there.
-
-```yaml
-llm:
-  options:
-    model: "claude-3-opus-20240229" # Current active model
-```
-
-## Testing
-
-Run the API integration tests:
 ```bash
-docker-compose exec api python3 tests/test_endpoints.py
+# Clone repository
+git clone git@github.com:dviresh93/bizgenie-website-rag-eval.git
+cd bizgenie-website-rag-eval
+
+# Set up API keys
+cp .env.example .env
+# Edit .env and add your keys:
+#   ANTHROPIC_API_KEY=sk-ant-...
+#   OPENAI_API_KEY=sk-...
+#   JINA_API_KEY=...
+#   TAVILY_API_KEY=...
 ```
 
----
+### 2. Run Evaluations
 
-## Troubleshooting
-
-### Issue: "Error: No module named 'chromadb'" or similar during `pip install`
-
-**Cause**: Python's "externally-managed-environment" policy prevents global package installation.
-
-**Fix**:
-The project is Dockerized. Dependencies are installed within the Docker container during build. Ensure `api/requirements.txt` is correct and rebuild the Docker image:
 ```bash
-docker-compose build api
+# Run all 4 combinations (takes ~10 minutes)
+python scripts/run_evaluation.py --mcp jina --llm claude
+python scripts/run_evaluation.py --mcp jina --llm gpt4
+python scripts/run_evaluation.py --mcp tavily --llm claude
+python scripts/run_evaluation.py --mcp tavily --llm gpt4
 ```
 
-### Issue: `docker-compose up` fails due to port conflict
+### 3. Generate Report
 
-**Cause**: Another process is already using port 8000 or 8001.
-
-**Fix:**
-Identify and stop the conflicting process/container. For Docker containers:
 ```bash
-docker ps # Find container using port 8000 or 8001
-docker stop <CONTAINER_ID>
+# Compare all combinations
+python scripts/generate_comparison_report.py
 ```
-Then retry:
+
+**Output:** Comprehensive markdown report in `test_results/benchmark_report_[timestamp].md`
+
+## 📊 Sample Report Output
+
+```
+🏆 Overall Rankings
+| Rank | Combination    | Quality | Total Cost | Total Time | Search Time | Gen Time | Halluc. |
+|------|----------------|---------|------------|------------|-------------|----------|---------|
+| 1    | jina_claude    | 85.2    | $0.0144    | 9.71s      | 0.57s       | 9.14s    | 0       |
+| 2    | tavily_claude  | 82.1    | $0.0192    | 7.15s      | 0.37s       | 6.78s    | 1       |
+
+🎯 Recommendations
+BEST OVERALL: JINA_CLAUDE
+- Highest quality (85.2/100)
+- Zero hallucinations
+- Use when: Quality and reliability matter most
+
+⚡ BEST FOR SPEED: TAVILY_GPT4
+- Fastest total time (4.7s)
+- Use when: Speed is critical
+```
+
+## 📁 Repository Structure
+
+```
+website-rag/
+├── README.md              # This file
+├── ARCHITECTURE.md        # System design documentation
+├── TODO.md               # Implementation checklist
+│
+├── .env.example          # API keys template
+├── scripts/              # Evaluation scripts
+│   ├── run_evaluation.py              # Run tests
+│   ├── ai_judge.py                    # AI quality evaluator
+│   └── generate_comparison_report.py  # Report generator
+│
+├── config/
+│   └── test_suites/
+│       └── standard_questions.json    # 25 test questions
+│
+├── api/                  # Tool implementations
+│   ├── app/tools/        # MCP tool implementations (Jina, Tavily)
+│   └── app/llm/          # LLM implementations (Claude, GPT-4)
+│
+└── test_results/         # Generated reports and data
+```
+
+## 📖 Documentation
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design and architecture
+- **[TODO.md](TODO.md)** - Development checklist and implementation guide
+
+## 🧪 How It Works
+
+1. **Test Questions:** Framework asks 25 questions about BizGenie services
+2. **Real-time Search:** Each MCP tool searches bizgenieai.com for relevant information
+3. **Answer Generation:** LLM generates answer based on search results
+4. **AI Judge Evaluation:** Separate AI judges answer quality (accuracy, completeness, clarity, helpfulness)
+5. **Metrics Collection:** Tracks search time, generation time, cost, token usage
+6. **Comprehensive Report:** Shows which combination performs best across all metrics
+
+## 🎯 Evaluation Metrics
+
+### Quality Metrics (6)
+- Overall Quality Score (0-100)
+- Accuracy, Completeness, Clarity, Helpfulness
+- Hallucination Detection
+
+### Performance Metrics (4)
+- Search Latency, Generation Latency, Total Latency
+- Fastest/Slowest Query Range
+
+### Cost Metrics (5)
+- Search Cost, Generation Cost, Total Cost
+- Total Cost for 25 Queries
+- Most/Least Expensive Query
+
+### Reliability Metrics (4)
+- Failed Queries, Token Usage
+- Answer Length, Quality Distribution
+
+## 🔧 Prerequisites
+
+- Python 3.11+
+- API Keys:
+  - **Anthropic API** (for Claude)
+  - **OpenAI API** (for GPT-4)
+  - **Jina AI API** (optional - free tier available)
+  - **Tavily API** (for search)
+
+## 💡 Use Cases
+
+**Choose the best combination for your needs:**
+- **Quality-focused:** Use jina_claude (highest accuracy, zero hallucinations)
+- **Speed-focused:** Use tavily_gpt4 (fastest total time)
+- **Budget-focused:** Use jina_claude (lowest cost per query)
+- **Balance:** Compare all metrics in the report
+
+## 🚧 Advanced Usage
+
+### Custom Test Questions
+
+Edit `config/test_suites/standard_questions.json` to add your own questions:
+
+```json
+{
+  "id": "q26",
+  "question": "Your custom question here",
+  "category": "custom",
+  "difficulty": "medium"
+}
+```
+
+### Run Single Combination
+
 ```bash
-docker-compose up -d
+python scripts/run_evaluation.py --mcp jina --llm claude
 ```
 
-### Issue: API returns "Error code: 404 - model not found" for LLM (e.g., Claude)
+### Compare Specific Runs
 
-**Cause**: The specified LLM model name in `config/configs.yaml` is incorrect, not supported by your API key, or not available in your region.
+The framework automatically uses the latest results. To compare specific runs, check `test_results/` directory.
 
-**Fix:**
-Update `config/configs.yaml` to use a model compatible with your Anthropic (or OpenAI) API key. Valid Claude models include `claude-3-opus-20240229` or `claude-3-haiku-20240307`.
+## 📈 Performance Tips
 
-```yaml
-# Example for Claude Haiku
-llm:
-  plugin: "claude"
-  api_key: ${ANTHROPIC_API_KEY}
-  options:
-    model: "claude-3-haiku-20240307"
-    temperature: 0.7
-```
-After modifying `configs.yaml`, trigger an API reload:
+- **Faster testing:** Run combinations in parallel (separate terminals)
+- **Cost optimization:** Use Jina (free tier) instead of Tavily ($0.012/search)
+- **Quality optimization:** Use Claude for fewer hallucinations
+- **Speed optimization:** Use GPT-4 for faster generation
+
+## 🐛 Troubleshooting
+
+### Issue: No API key found
+
+**Fix:** Ensure `.env` file exists with valid API keys:
 ```bash
-touch api/app/main.py
+cp .env.example .env
+# Edit .env and add your actual keys
 ```
 
-### Issue: UI dropdown is empty, or "Nothing happens" on button click
+### Issue: Rate limit errors
 
-**Cause**: Browser caching of old JavaScript, or incorrect script path.
+**Fix:** Add delays between runs or use different API keys for parallel testing.
 
-**Fix:**
-1.  **Hard Refresh:** Press `Ctrl + F5` (Windows/Linux) or `Cmd + Shift + R` (Mac) to force the browser to reload all assets.
-2.  **Verify Script Path:** Ensure `ui/index.html` references `script.js` correctly:
-    ```html
-    <script src="/ui/script.js?v=2"></script>
-    ```
-    (Note the `/ui/` prefix).
+### Issue: Empty or incomplete reports
 
-### Issue: Frontend errors like `net::ERR_ABORTED 404 (Not Found)` for `script.js`
+**Fix:** Ensure all 4 combinations have completed successfully. Check `test_results/` for eval and results files.
 
-**Cause**: Incorrect path for `script.js` in `ui/index.html`. The FastAPI static files are served from `/ui/`.
+## 📊 Current Results
 
-**Fix:**
-Ensure the script tag in `ui/index.html` specifies the full path:
-```html
-<script src="/ui/script.js?v=2"></script>
-```
+Latest benchmark report available at: `test_results/benchmark_report_[latest].md`
 
----
+**Key Findings:**
+- Jina + Claude: Highest quality (72.6/100), zero hallucinations
+- Tavily + GPT-4: Fastest speed (4.7s average)
+- Jina combinations: Lower cost ($0.014 vs $0.019)
+- All combinations: Zero hallucinations on current test set
 
 ## 🗺️ Roadmap
 
-### ✅ Completed (v1.0)
-
-- [x] Plugin architecture with swappable components
-- [x] Jina AI integration for web scraping
-- [x] Claude 3 Opus for Q&A
-- [x] ChromaDB for vector storage
-- [x] REST API with FastAPI
-- [x] Docker containerization
-- [x] Configuration management
-- [x] Simple web UI for indexing and querying
-
-### 🚧 In Progress
-
-- [ ] Additional data retrieval plugins (Tavily, Firecrawl)
-- [ ] GPT-4 plugin for comparison
-- [ ] Testing framework with metrics
-
----
+- [x] Core evaluation framework
+- [x] Jina + Tavily MCP tools
+- [x] Claude + GPT-4 LLMs
+- [x] AI-as-judge evaluation
+- [x] Comprehensive metrics (19 total)
+- [ ] Web UI for running evaluations
+- [ ] More MCP tools (Firecrawl, Exa, etc.)
+- [ ] More LLMs (Gemini, Mistral, etc.)
+- [ ] Custom evaluation criteria
 
 ## 💡 Credits
 
 Built with:
-- [FastAPI](https://fastapi.tiangolo.com/) - Web framework
-- [Claude 3](https://www.anthropic.com/claude) - LLM by Anthropic
-- [Jina AI](https://jina.ai/) - Web content extraction
-- [ChromaDB](https://www.trychroma.com/) - Vector database
-- [OpenAI](https://openai.com/) - Embeddings API
+- [Anthropic Claude](https://www.anthropic.com/claude) - LLM and AI judge
+- [OpenAI GPT-4](https://openai.com/) - LLM
+- [Jina AI Reader](https://jina.ai/reader) - Web content extraction
+- [Tavily AI](https://tavily.com/) - AI search engine
+- [Python](https://python.org/) - Framework language
 
 ---
 

@@ -3,7 +3,6 @@ import json
 import os
 import sys
 import time
-import re
 from pathlib import Path
 
 # Add api to path to import tools
@@ -24,13 +23,11 @@ def main():
     parser.add_argument("--mcp", required=True, choices=["jina", "tavily"], help="MCP Tool to test")
     parser.add_argument("--llm", required=True, choices=["claude", "gpt4"], help="LLM to test")
     parser.add_argument("--questions", default="config/test_suites/standard_questions.json")
-    parser.add_argument("--baseline", default="test_results/ground_truth/baseline.md")
     args = parser.parse_args()
 
     # Path adjustments
     base_path = "website-rag" if os.path.exists("website-rag") else "."
     questions_path = os.path.join(base_path, args.questions)
-    baseline_path = os.path.join(base_path, args.baseline)
     
     # Initialize Tool
     print(f"Initializing {args.mcp}...")
@@ -55,7 +52,6 @@ def main():
         llm = GPT4LLM(llm_config)
 
     # Initialize Judge
-    # We will use the judge at the end for batch evaluation
     judge = AIJudge()
 
     # Load Questions
@@ -93,7 +89,6 @@ def main():
         # 2. Generate
         start_gen = time.time()
         
-        # Construct system prompt manually for test script
         system_prompt = (
             f"You are an expert customer support representative for {target_url}. "
             "Your goal is to provide accurate, helpful answers primarily based on the information "
@@ -105,7 +100,7 @@ def main():
         try:
             llm_res = llm.generate(history, search_res.content, system_prompt=system_prompt)
             gen_time = time.time() - start_gen
-            print(f"   ✓ Answer generated ({gen_time:.2f}s): {llm_res.answer[:100]}...")
+            print(f"   ✓ Answer generated ({gen_time:.2f}s)")
         except Exception as e:
             print(f"   ❌ Generation failed: {e}")
             continue
@@ -144,7 +139,6 @@ def main():
     try:
         judge.evaluate_batch(
             results_file=results_file,
-            baseline_file=baseline_path,
             output_file=eval_file
         )
     except Exception as e:
