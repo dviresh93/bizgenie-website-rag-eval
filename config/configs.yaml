@@ -18,6 +18,23 @@ mcp_tools:
     config:
       mode: "search"
 
+  exa:
+    name: "Exa AI Search"
+    class: "ExaTool"
+    module: "api.app.tools.exa_tool"
+    api_key_env: "EXA_API_KEY"
+    config:
+      use_autoprompt: true
+      max_results: 5
+
+  firecrawl:
+    name: "Firecrawl Scraper"
+    class: "FirecrawlTool"
+    module: "api.app.tools.firecrawl_tool"
+    api_key_env: "FIRECRAWL_API_KEY"
+    config:
+      formats: ["markdown"]
+
 # Available LLMs
 llm_models:
   claude:

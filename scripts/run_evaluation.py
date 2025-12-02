@@ -11,6 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 from api.app.tools.jina_tool import JinaTool
 from api.app.tools.tavily_tool import TavilyTool
 from api.app.tools.exa_tool import ExaTool
+from api.app.tools.firecrawl_tool import FirecrawlTool
 from api.app.llm.claude_llm import ClaudeLLM
 from api.app.llm.gpt4_llm import GPT4LLM
 from scripts.ai_judge import AIJudge
@@ -21,7 +22,7 @@ def load_json(filepath):
 
 def main():
     parser = argparse.ArgumentParser(description="Run RAG Evaluation")
-    parser.add_argument("--mcp", required=True, choices=["jina", "tavily"], help="MCP Tool to test")
+    parser.add_argument("--mcp", required=True, choices=["jina", "tavily", "firecrawl"], help="MCP Tool to test")
     parser.add_argument("--llm", required=True, choices=["claude", "gpt4"], help="LLM to test")
     parser.add_argument("--questions", default="config/test_suites/standard_questions.json")
     args = parser.parse_args()
@@ -38,6 +39,8 @@ def main():
         mcp_tool = JinaTool({"api_key_env": "JINA_API_KEY"})
     elif args.mcp == "tavily":
         mcp_tool = TavilyTool({"api_key_env": "TAVILY_API_KEY", "config": {"search_depth": "advanced"}})
+    elif args.mcp == "firecrawl":
+        mcp_tool = FirecrawlTool({"api_key_env": "FIRECRAWL_API_KEY"})
 
     # Initialize LLM
     print(f"Initializing {args.llm}...")

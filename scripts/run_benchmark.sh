@@ -23,6 +23,8 @@ declare -a combinations=(
     "tavily gpt4"
     "jina claude"
     "jina gpt4"
+    "firecrawl claude"
+    "firecrawl gpt4"
 )
 
 # Start all combinations in parallel
