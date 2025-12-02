@@ -10,6 +10,16 @@ import time
 import re
 from typing import Dict, List, Optional
 from anthropic import Anthropic
+from pydantic import BaseModel, Field, ValidationError # Import BaseModel and Field
+
+# Define a Pydantic model for the expected JSON output from the AI Judge
+class JudgeResult(BaseModel):
+    accuracy: int = Field(..., ge=0, le=100)
+    completeness: int = Field(..., ge=0, le=100)
+    clarity: int = Field(..., ge=0, le=100)
+    helpfulness: int = Field(..., ge=0, le=100)
+    hallucination: bool
+    reasoning: str
 
 class AIJudge:
     """
@@ -32,7 +42,7 @@ class AIJudge:
         system_answer: str,
         system_sources: List[str],
         retries: int = 3
-    ) -> dict:
+    ) -> JudgeResult: # Change return type to JudgeResult
         """
         Evaluate answer quality using AI judge.
         """
@@ -78,41 +88,41 @@ Respond ONLY with a valid JSON object:
                 )
 
                 content = response.content[0].text.strip()
-                # Cleanup markdown
-                if content.startswith("```json"):
-                    content = content.split("```json")[1]
-                if content.endswith("```"):
-                    content = content.split("```")[0]
                 
-                try:
-                    result = json.loads(content)
-                except json.JSONDecodeError as e:
-                    print(f"\n[DEBUG] JSON Decode Error. Content received:\n{content}\n[END DEBUG]\n")
-                    raise e
+                # Robust JSON extraction using regex
+                json_match = re.search(r'\{.*\}', content, re.DOTALL)
+                if json_match:
+                    json_str = json_match.group(0)
+                else:
+                    raise ValueError("No JSON object found in LLM response.")
+                
+                # Parse with Pydantic for validation
+                judge_result = JudgeResult.model_validate_json(json_str)
 
                 # Calculate overall quality
                 # Weighted average: Accuracy (40%), Completeness (30%), Clarity (15%), Helpfulness (15%)
-                result["overall_quality"] = (
-                    result["accuracy"] * 0.40 +
-                    result["completeness"] * 0.30 +
-                    result["clarity"] * 0.15 +
-                    result["helpfulness"] * 0.15
+                judge_result.overall_quality = ( # Add overall_quality as dynamic attribute
+                    judge_result.accuracy * 0.40 +
+                    judge_result.completeness * 0.30 +
+                    judge_result.clarity * 0.15 +
+                    judge_result.helpfulness * 0.15
                 )
                 
                 # Penalty for hallucination
-                if result.get("hallucination"):
-                    result["overall_quality"] *= 0.5 # Severe penalty
+                if judge_result.hallucination:
+                    judge_result.overall_quality *= 0.5 # Severe penalty
 
-                return result
+                return judge_result
 
-            except Exception as e:
+            except (ValueError, ValidationError, Exception) as e: # Catch Pydantic validation errors
                 print(f"   ⚠️ AI Judge Error (Attempt {attempt+1}): {e}")
+                print(f"   [DEBUG] Content attempted to parse:\n{content}\n[END DEBUG]\n")
                 if attempt == retries - 1:
-                    return {
-                        "accuracy": 0, "completeness": 0, "clarity": 0, "helpfulness": 0,
-                        "hallucination": False, "overall_quality": 0, 
-                        "reasoning": f"Evaluation failed: {str(e)}"
-                    }
+                    # Return a default JudgeResult on persistent failure
+                    return JudgeResult(
+                        accuracy=0, completeness=0, clarity=0, helpfulness=0,
+                        hallucination=True, reasoning=f"Evaluation failed: {str(e)}"
+                    )
                 time.sleep(2)
 
     def evaluate_batch(self, results_file: str, output_file: str):
@@ -135,13 +145,16 @@ Respond ONLY with a valid JSON object:
                 system_sources=result.get("sources", [])
             )
 
+            # Convert JudgeResult Pydantic model to dict for JSON serialization
+            evaluation_dict = evaluation.model_dump()
+            
             # Add metadata
-            evaluation["question_id"] = q_id
-            evaluation["question"] = result["question"]
+            evaluation_dict["question_id"] = q_id
+            evaluation_dict["question"] = result["question"]
             
             # Determine verdict based on score
-            score = evaluation.get("overall_quality", 0)
-            if evaluation.get("hallucination"):
+            score = evaluation.overall_quality # Access attribute directly
+            if evaluation.hallucination: # Access attribute directly
                 verdict = "HALLUCINATION"
             elif score >= 80:
                 verdict = "EXCELLENT"
@@ -152,8 +165,8 @@ Respond ONLY with a valid JSON object:
             else:
                 verdict = "POOR"
             
-            evaluation["verdict"] = verdict
-            evaluations.append(evaluation)
+            evaluation_dict["verdict"] = verdict
+            evaluations.append(evaluation_dict)
 
             print(f"   Score: {score:.1f}/100 ({verdict})")
             # Rate limiting
