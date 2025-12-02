@@ -17,6 +17,7 @@ echo "Logs will be saved to $LOG_DIR"
 echo ""
 
 # Define combinations to test
+# Added Exa combinations
 declare -a combinations=(
     "tavily claude"
     "tavily gpt4"
@@ -47,7 +48,7 @@ for combo in "${combinations[@]}"; do
 done
 
 echo ""
-echo "All 4 evaluations running. Monitoring progress..."
+echo "All 6 evaluations running. Monitoring progress..."
 echo "------------------------------------------------"
 
 # Monitor loop
@@ -69,15 +70,15 @@ while true; do
             else
                 last_line="Initializing..."
             fi
-            output_lines+="${combo}: ${last_line}...
-"
+            output_lines+="${combo}: ${last_line}..\n"
         else
             output_lines+="${combo}: ✅ Completed (or Failed - check log)\n"
         fi
     done
 
     # Clear screen section (simple implementation)
-    printf "\033[5A"
+    # Adjust cursor move for 6 lines
+    printf "\033[7A"
     printf "$output_lines"
     
     if [ $running_count -eq 0 ]; then
