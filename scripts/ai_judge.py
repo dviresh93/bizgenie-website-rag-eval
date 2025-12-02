@@ -20,6 +20,7 @@ class JudgeResult(BaseModel):
     helpfulness: int = Field(..., ge=0, le=100)
     hallucination: bool
     reasoning: str
+    overall_quality: float = 0.0 # Add this field to the Pydantic model
 
 class AIJudge:
     """
