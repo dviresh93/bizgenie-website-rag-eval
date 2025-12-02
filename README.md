@@ -460,6 +460,64 @@ We created several debug scripts (`scripts/test_exa_*.py`) to isolate the issue:
 
 ---
 
+## 🔬 Firecrawl & Caching Integration (2025-12-02)
+
+**Objective:** Enhance the RAG system with advanced scraping (Firecrawl) and semantic caching to improve reliability, quality, and latency.
+
+### 1. Firecrawl Integration Findings
+We integrated **Firecrawl** (v0.0.16+) as a direct competitor to Jina for deep website scraping.
+
+**Benchmark Results (vs Jina & Tavily):**
+| Tool | Role | Overall Quality | Hallucinations | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **Jina AI** | Scraper | **95.1/100** | **0** | Best context extraction for this site. |
+| **Tavily** | Search | 90.1/100 | 2 | Excellent speed/quality balance. |
+| **Firecrawl** | Scraper | 86.8/100 | 4 | Strong contender, good clarity (98.0). |
+
+**Verdict:**
+- **Jina** remains the quality leader for single-page ingestion.
+- **Firecrawl** is a viable, high-quality alternative with robust JS handling.
+- **Tavily** excels at broad search but holds its own in specific site Q&A.
+
+### 2. Semantic Cache Architecture
+To solve latency issues (~10s per query) and reduce costs, we implemented a **Semantic Cache** using ChromaDB.
+
+**How it works:**
+1.  **Exact Match:** Hashes `(tool, question, url)` for instant hits (2ms).
+2.  **Semantic Match:** Uses vector similarity to find "similar" questions (e.g., "What is the pricing?" vs "How much does it cost?").
+3.  **Performance Impact:**
+    - **Cold Run:** ~10s latency (Full API call + LLM gen).
+    - **Warm Run:** **<0.5s latency** (Cache hit).
+    - **Hit Rate:** >80% observed in testing.
+
+### 3. System Flow with Caching
+
+```mermaid
+graph TD
+    User[User Question] --> CacheCheck{Check Cache?}
+    
+    CacheCheck -- Yes --> ChromaDB[(Semantic Cache)]
+    ChromaDB -- Hit (Exact/Semantic) --> Return[Return Cached Answer]
+    
+    CacheCheck -- Miss --> Router{Select Tool}
+    
+    Router -- Jina --> JinaAPI[Jina Reader]
+    Router -- Tavily --> TavilyAPI[Tavily Search]
+    Router -- Firecrawl --> FirecrawlAPI[Firecrawl Scraper]
+    
+    JinaAPI --> Context
+    TavilyAPI --> Context
+    FirecrawlAPI --> Context
+    
+    Context --> LLM[LLM Generation]
+    LLM --> Answer
+    
+    Answer --> Store[Store in Cache]
+    Store --> Return
+```
+
+---
+
 ## 🗺️ Roadmap
 
 - [x] Core evaluation framework
