@@ -207,8 +207,11 @@ website-rag/
 
 ## 📖 Documentation
 
-- **[TESTING.md](TESTING.md)** - Detailed testing methodology and evaluation philosophy
+- **[TESTING.md](TESTING.md)** - Complete testing guide with scripts reference and workflow diagrams
+- **[RESULTS.md](RESULTS.md)** - Latest benchmark results with AI-powered analysis
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design and architecture
+- **[EXA_EVALUATION.md](EXA_EVALUATION.md)** - Exa.ai evaluation findings and shortcomings analysis
+- **[scripts/EXA_TUNING_GUIDE.md](scripts/EXA_TUNING_GUIDE.md)** - Exa.ai testing and configuration guide
 - **[TODO.md](TODO.md)** - Development checklist and implementation guide
 
 ---
@@ -426,35 +429,30 @@ ls -la test_results/tavily_gpt4/
 
 ---
 
-## 🔬 Recent Experiments & Troubleshooting (Exa.ai Integration)
+## 🔬 Exa.ai Evaluation
 
-**Date:** 2025-12-01
-**Objective:** Integrate and benchmark **Exa.ai** (formerly Metaphor) as a new MCP tool.
+**Status:** ❌ Not recommended for production until bizgenieai.com is indexed
 
-### 1. The Challenge: "0 Results" on Benchmark
-When running the benchmark suite for `exa_claude` and `exa_gpt4`, the system consistently reported **0 sources found**, yet the LLM produced fluent answers.
-- **Error:** The `ai_judge.py` script crashed with `JSONDecodeError` because the Judge LLM received no sources and returned a text refusal instead of JSON scores.
-- **Observation:** Manual testing on localhost appeared to work, but further investigation revealed this was a **hallucination**. The API returned 0 sources, but the LLM generated a confident response based on internal training data, misleading the user.
+We conducted comprehensive testing of **Exa.ai** (neural search) as a potential MCP tool. Key findings:
 
-### 2. Diagnosis
-We created several debug scripts (`scripts/test_exa_*.py`) to isolate the issue:
-- **`test_exa_simple.py`:** Confirmed that searching for `include_domains=["bizgenieai.com"]` returned 0 results.
-- **`test_exa_broad.py`:** Confirmed that broad searching (no domain restriction) found irrelevant "BizGenie" companies but not the target startup.
-- **`test_exa_queries.py`:** Confirmed that `https://bizgenieai.com/` is **not yet indexed** in Exa's neural search index.
-- **`test_exa_retrieve.py`:** **Success!** Confirmed that Exa's `get_contents()` method *can* fetch the page directly, bypassing the search index.
+**Critical Issue:**
+- bizgenieai.com returns **0 results** with domain filtering (site not indexed)
+- Without domain filter: Returns irrelevant results from similarly-named companies
 
-### 3. Architectural Findings: Exa vs. Jina vs. Tavily
-| Feature | Jina AI (Reader) | Tavily AI | Exa.ai |
-| :--- | :--- | :--- | :--- |
-| **Core Function** | **Scraper** (Live Fetch) | **Search Engine** (Live + Cache) | **Neural Search** (Custom Index) |
-| **Unindexed Sites** | ✅ Works (Fetches live) | ✅ Works (Crawls on demand) | ❌ Fails Search / ✅ Works Retrieve |
-| **Best For** | Specific URL RAG | Fact-checking / News | Broad Semantic Research |
+**Performance Comparison:**
 
-### 4. The Fix
-1.  **Robust AI Judge:** Updated `scripts/ai_judge.py` to handle non-JSON responses gracefully, preventing benchmark crashes.
-2.  **Strict Retrieval Mode:** Modified `ExaTool` to implement a **"Strict Retrieval"** strategy.
-    *   If a specific `context` URL is provided (e.g., `https://bizgenieai.com/`), the tool now uses `client.get_contents()` to fetch that page directly.
-    *   This effectively turns Exa into a "Reader" for unindexed sites, ensuring the LLM receives actual ground-truth data.
+| Tool | Domain Filter Works | Results Found | Production Ready |
+|------|---------------------|---------------|------------------|
+| Jina Reader | ✅ Yes | 5/5 questions | ✅ Yes |
+| Tavily | ✅ Yes | 5/5 questions | ✅ Yes |
+| Firecrawl | ✅ Yes | 5/5 questions | ✅ Yes |
+| Exa.ai | ❌ No (not indexed) | 0/5 questions | ❌ No |
+
+**📄 [View Complete Evaluation →](EXA_EVALUATION.md)**
+*Includes: Test methodology, 5 documented shortcomings, root cause analysis, and recommendations*
+
+**🔧 [Exa.ai Testing Guide →](scripts/EXA_TUNING_GUIDE.md)**
+*For testing Exa.ai with different configurations once indexing is available*
 
 ---
 
