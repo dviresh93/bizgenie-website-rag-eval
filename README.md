@@ -129,39 +129,37 @@ docker-compose exec api python3 scripts/generate_comparison_report.py
 
 ---
 
-## 📊 Actual Test Results
+## 📊 Benchmark Results & Evaluation Framework
 
-**Latest Report:** [`test_results/benchmark_report_20251128-035332.md`](test_results/benchmark_report_20251128-035332.md)
+**Latest Benchmark:** December 2, 2025 | 25 Questions | 6 Tool Combinations
 
-```
-🏆 Overall Rankings
-| Rank | Combination    | Quality | Total Cost | Total Time | Search Time | Gen Time | Halluc. |
-|------|----------------|---------|------------|------------|-------------|----------|---------|
-| 1    | jina_claude    | 72.6    | $0.0144    | 9.71s      | 0.57s       | 9.14s    | 0       |
-| 2    | tavily_claude  | 71.1    | $0.0192    | 7.15s      | 0.37s       | 6.78s    | 0       |
-| 3    | tavily_gpt4    | 64.5    | $0.0187    | 4.70s      | 0.34s       | 4.36s    | 0       |
-| 4    | jina_gpt4      | 56.3    | $0.0143    | 6.53s      | 0.36s       | 6.16s    | 0       |
+### Evaluation Rubric
 
-🎯 Recommendations
-BEST OVERALL: JINA_CLAUDE
-- Highest quality (72.6/100)
-- Zero hallucinations (0/25 questions)
-- Best accuracy (71.2), completeness (63.4), clarity (96.4)
-- Lowest total cost ($0.0144/query)
-- Use when: Quality and reliability matter most
+Our framework evaluates each combination across five equally important dimensions (20% each):
 
-⚡ BEST FOR SPEED: TAVILY_GPT4
-- Fastest total time (4.70s) - 2x faster than Jina_Claude
-- Quality trade-off: 64.5/100 vs 72.6/100
-- Zero hallucinations
-- Use when: Speed is critical
+| Dimension | Key Metrics | Description |
+|-----------|-------------|-------------|
+| **Accuracy & Quality** | Quality Score, Hallucination Rate | Factual correctness and answer completeness |
+| **Latency** | Total Response Time, Search Time, Generation Time | End-to-end speed and performance |
+| **Operational Cost** | Cost per Query, Cost at Scale | Direct API costs (search + LLM) |
+| **Ease of Adoption** | Setup Time, Documentation, API Access | Implementation complexity |
+| **Maturity** | Stability, Feature Coverage, Support | Production readiness |
 
-💰 BEST VALUE: JINA_GPT4
-- Lowest cost ($0.0143/query)
-- Moderate quality (56.3/100)
-- Zero hallucinations
-- Use when: Budget-conscious with quality trade-off acceptable
-```
+*All dimensions weighted equally at 20% - they are all necessary and important for production use.*
+
+### Overall Rankings
+
+| Rank | Combination | Quality | Cost/Query | Latency | Hallucinations |
+|:----:|-------------|:-------:|:----------:|:-------:|:--------------:|
+| 1 | **jina_claude** | **95.1** | $0.0069 | 8.96s | **0** |
+| 2 | **tavily_claude** | 90.1 | $0.0055 | 8.48s | 2 |
+| 3 | **firecrawl_claude** | 86.8 | $0.0067 | 8.61s | 4 |
+| 4 | jina_gpt4 | 74.2 | $0.0168 | 7.60s | 9 |
+| 5 | tavily_gpt4 | 66.4 | $0.0128 | 6.69s | 12 |
+| 6 | firecrawl_gpt4 | 66.2 | $0.0183 | 6.51s | 11 |
+
+**📄 [View Detailed Results →](RESULTS.md)**
+*Includes: AI-powered analysis, quality score calculations, performance breakdowns, and individual question analysis*
 
 ---
 

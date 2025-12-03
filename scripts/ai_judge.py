@@ -101,12 +101,12 @@ Respond ONLY with a valid JSON object:
                 judge_result = JudgeResult.model_validate_json(json_str)
 
                 # Calculate overall quality
-                # Weighted average: Accuracy (40%), Completeness (30%), Clarity (15%), Helpfulness (15%)
+                # Equal weighting: Accuracy (25%), Completeness (25%), Clarity (25%), Helpfulness (25%)
                 judge_result.overall_quality = ( # Add overall_quality as dynamic attribute
-                    judge_result.accuracy * 0.40 +
-                    judge_result.completeness * 0.30 +
-                    judge_result.clarity * 0.15 +
-                    judge_result.helpfulness * 0.15
+                    judge_result.accuracy * 0.25 +
+                    judge_result.completeness * 0.25 +
+                    judge_result.clarity * 0.25 +
+                    judge_result.helpfulness * 0.25
                 )
                 
                 # Penalty for hallucination
