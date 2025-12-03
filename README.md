@@ -24,6 +24,7 @@ A modular evaluation framework for testing different **MCP (Model Context Protoc
 - [🔬 Firecrawl & Caching Integration](#-firecrawl--caching-integration-2025-12-02)
 - [🗺️ Roadmap](#️-roadmap)
 - [💡 Credits](#-credits)
+- [📋 Appendix: File Reference](#-appendix-file-reference)
 
 ---
 
@@ -232,12 +233,12 @@ website-rag/
 
 ## 📖 Documentation
 
-- **[TESTING.md](TESTING.md)** - Complete testing guide with scripts reference and workflow diagrams
-- **[RESULTS.md](RESULTS.md)** - Latest benchmark results with AI-powered analysis
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design and architecture
-- **[EXA_EVALUATION.md](EXA_EVALUATION.md)** - Exa.ai evaluation findings and shortcomings analysis
-- **[scripts/EXA_TUNING_GUIDE.md](scripts/EXA_TUNING_GUIDE.md)** - Exa.ai testing and configuration guide
-- **[TODO.md](TODO.md)** - Development checklist and implementation guide
+- **[TESTING.md](docs/TESTING.md)** - Complete testing guide with scripts reference and workflow diagrams
+- **[RESULTS.md](docs/RESULTS.md)** - Latest benchmark results with AI-powered analysis
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design and architecture
+- **[EXA_EVALUATION.md](docs/EXA_EVALUATION.md)** - Exa.ai evaluation findings and shortcomings analysis
+- **[EXA_TUNING_GUIDE.md](docs/EXA_TUNING_GUIDE.md)** - Exa.ai testing and configuration guide
+- **[TODO.md](docs/TODO.md)** - Development checklist and implementation guide
 
 ---
 
@@ -473,10 +474,10 @@ We conducted comprehensive testing of **Exa.ai** (neural search) as a potential 
 | Firecrawl | ✅ Yes | 5/5 questions | ✅ Yes |
 | Exa.ai | ❌ No (not indexed) | 0/5 questions | ❌ No |
 
-**📄 [View Complete Evaluation →](EXA_EVALUATION.md)**
+**📄 [View Complete Evaluation →](docs/EXA_EVALUATION.md)**
 *Includes: Test methodology, 5 documented shortcomings, root cause analysis, and recommendations*
 
-**🔧 [Exa.ai Testing Guide →](scripts/EXA_TUNING_GUIDE.md)**
+**🔧 [Exa.ai Testing Guide →](docs/EXA_TUNING_GUIDE.md)**
 *For testing Exa.ai with different configurations once indexing is available*
 
 ---
@@ -563,6 +564,73 @@ Built with:
 - [Tavily AI](https://tavily.com/) - AI search engine
 - [Python](https://python.org/) - Framework language
 - [Docker](https://docker.com/) - Containerization
+
+---
+
+## 📋 Appendix: File Reference
+
+### Root Directory Files
+
+| File | Purpose |
+|------|---------|
+| `README.md` | Main project documentation and quick start guide |
+| `docker-compose.yml` | Docker container configuration for API and ChromaDB services |
+| `.env` | Environment variables and API keys (not committed) |
+| `.env.example` | Template for required environment variables |
+| `.gitignore` | Git ignore rules for Python cache, logs, and sensitive files |
+
+### Documentation (`docs/`)
+
+| File | Purpose |
+|------|---------|
+| `TESTING.md` | Complete testing guide with scripts reference and workflow diagrams |
+| `RESULTS.md` | Latest benchmark results with AI-powered analysis and rankings |
+| `ARCHITECTURE.md` | System design, architecture decisions, and component relationships |
+| `EXA_EVALUATION.md` | Exa.ai evaluation findings, shortcomings, and recommendations |
+| `EXA_TUNING_GUIDE.md` | Guide for testing and configuring Exa.ai with different settings |
+| `TODO.md` | Development checklist and implementation roadmap |
+| `IMPLEMENTATION_PLAN.md` | Detailed implementation plans and technical decisions |
+
+### Scripts (`scripts/`)
+
+| File | Purpose |
+|------|---------|
+| `run_benchmark.sh` | Main orchestrator - runs all 6 tool+LLM combinations in parallel |
+| `run_evaluation.py` | Single combination runner - tests one specific tool+LLM pair |
+| `ai_judge.py` | AI-powered quality evaluator using Claude Opus for answer grading |
+| `generate_comparison_report.py` | Generates comparison reports with rankings and LLM-powered insights |
+| `test_exa_tuning.py` | Standalone Exa.ai testing script with 5 different configurations |
+| `test_cache_performance.py` | Diagnostic tool for testing semantic cache performance |
+| `clean_test_results.sh` | Utility to clean all test results and start fresh |
+
+### Configuration (`config/`)
+
+| Directory | Purpose |
+|-----------|---------|
+| `test_suites/` | Contains standard_questions.json with 25 curated test questions |
+
+### Application Code (`api/`)
+
+| Directory | Purpose |
+|-----------|---------|
+| `app/tools/` | MCP tool implementations (Jina, Tavily, Firecrawl, Exa) |
+| `app/llm/` | LLM implementations (Claude, GPT-4) |
+| `app/services/` | Semantic cache manager and other shared services |
+
+### Test Results (`test_results/`)
+
+| Directory | Purpose |
+|-----------|---------|
+| `jina_claude/`, `jina_gpt4/`, etc. | Results for each tool+LLM combination (results_*.json, eval_*.json) |
+| `logs/` | Script execution logs from parallel benchmark runs |
+| `exa_tuning/` | Exa.ai testing results (exa_test_*.json, exa_report_*.md) |
+| `benchmark_report_*.md` | Timestamped comparison reports |
+
+### UI Tools (`ui/`)
+
+| File | Purpose |
+|------|---------|
+| `viewer.html` | Browser-based JSON viewer for exploring eval_*.json results interactively |
 
 ---
 
