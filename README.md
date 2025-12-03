@@ -2,6 +2,31 @@
 
 A modular evaluation framework for testing different **MCP (Model Context Protocol) tools** and **LLMs** to find the best combination for answering questions about BizGenie services.
 
+---
+
+## 📑 Table of Contents
+
+- [🎯 What This Framework Does](#-what-this-framework-does)
+- [📊 Evaluation Flow](#-evaluation-flow)
+- [🚀 Quick Start](#-quick-start)
+- [📊 Benchmark Results & Evaluation Framework](#-benchmark-results--evaluation-framework)
+- [📁 Repository Structure](#-repository-structure)
+- [📖 Documentation](#-documentation)
+- [🎯 Evaluation Metrics](#-evaluation-metrics-19-total)
+- [🧪 How It Works](#-how-it-works)
+- [🔧 Prerequisites](#-prerequisites)
+- [💡 Use Cases](#-use-cases)
+- [🚧 Advanced Usage](#-advanced-usage)
+- [📈 Performance Tips](#-performance-tips)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [📊 Test Results Summary](#-test-results-summary)
+- [🔬 Exa.ai Evaluation](#-exaai-evaluation)
+- [🔬 Firecrawl & Caching Integration](#-firecrawl--caching-integration-2025-12-02)
+- [🗺️ Roadmap](#️-roadmap)
+- [💡 Credits](#-credits)
+
+---
+
 ## 🎯 What This Framework Does
 
 Tests **4 combinations** of search tools and LLMs:
